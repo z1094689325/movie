@@ -7,9 +7,11 @@ This is a temporary script file.
 import re
 import sqlite3
 import time
+import threading
+import sys
 
 import requests
-
+import redis
 from spider import Spider
 
 
@@ -18,6 +20,11 @@ from spider import Spider
 
 class Film:
     
+    def __init__(self):
+        
+        self.redis = redis.Redis(host = '192.168.2.107', port = '6379', password = '1', db = '5')
+    
+        self.test_db()
     ######特征函数#######
     
     def split_info(self, info_str):
@@ -218,13 +225,46 @@ class Film:
         
         url = 'https://www.subo8988.com/?m=vod-index-pg-{}.html'
         
+        self.queue = [url.format(i) for i in range(1, 485)]
         
         
-        return [url.format(i) for i in range(1, 485)]
+        return self.queue
     
     
     
     ###########功能区#######################
+    
+    def test_db(self):
+        conn = sqlite3.connect('film.sqlite3')
+        
+        cursor = conn.cursor()
+        
+        creart_sql = '''\
+        
+            CREATE TABLE IF NOT EXISTS film_info(
+            
+            
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    
+                    name TEXT,
+                    
+                    url  TEXT UNIQUE,
+                    
+                    update_time  TEXT,
+                    
+                    types  TEXT,
+                    
+                    status TEXT NULL
+            
+            
+            )
+        
+        '''
+        
+        cursor.execute(creart_sql)
+        conn.commit()
+        
+        
     
     def save_all_film_info(self):
         
@@ -254,7 +294,7 @@ class Film:
                     
                     name TEXT,
                     
-                    url  TEXT,
+                    url  TEXT UNIQUE,
                     
                     update_time  TEXT,
                     
@@ -311,6 +351,65 @@ class Film:
                 
             print('用时', time.time() - start)
             
+    def work(self):
+        
+        insert_sql = '''
+        
+            INSERT INTO film_info
+            
+            (name ,url, update_time, types)   
+            
+            VALUES       
+            
+            (?, ?, ?, ?)'''
+        
+        conn = sqlite3.connect('film.sqlite3')
+            
+        cursor = conn.cursor()
+        
+        while True:
+         
+            show_page_url = self.queue.pop()
+            
+            try:
+            
+                info = self.get_show_page_info(show_page_url)['film_list']
+                
+            except requests.exceptions.ConnectionError:
+                
+                self.redis.set(show_page_url, str(sys.exc_info()))
+                
+                print('出错啦', show_page_url)
+                
+            else:
+                
+      
+                insert_list = [(i['name'], i['url'], i['update_time'], i['types']) for i in info]
+                    
+                cursor.executemany(insert_sql, insert_list)
+                
+                conn.commit()
+                
+                print(show_page_url)
+            
+    def my_thread(self):
+        
+        self.get_all_show_page_url()
+        
+        for i in range(5):
+        
+            t = threading.Thread(target = self.work)#, args = (), kwargs = {})
+            
+            t.start()
+        
+        
+        
+        
+            
+            
+        
+        
+            
             
             
             
@@ -328,7 +427,7 @@ if __name__ == '__main__':
     
     x = Film()
     
-    x.save_all_film_info()
+    x.my_thread()
     
     
         
