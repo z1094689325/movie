@@ -1,2 +1,3 @@
 film.sqlite3
 *.txt
+*.pyc
