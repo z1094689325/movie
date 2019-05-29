@@ -4,71 +4,40 @@ Spyder Editor
 
 This is a temporary script file.
 """
-import sqlite3
-import time
-import threading
-import sys
-
-import redis
 from spider import Spider
 
 
-
-
-
-class Film:
+class FilmSubo8988:
     
-    def __init__(self):
+    '''
+    def get_film_info(self, url, encoding = None): 
         
-        self.redis = redis.Redis(host = '192.168.2.107', port = '6379', password = '1', db = '5')
+        传入一个电影详情链接，清洗该链接数据
         
-        self.conn = sqlite3.connect('film.sqlite3', check_same_thread = False)
+    def film_search(self, keyword, encoding = None):
         
-        self.cursor = self.conn.cursor()
+        传入一个关键字，返回关键字的在网站的搜索结果
         
-        self.cursor_lock = threading.Lock()
+    def get_show_page_info(self,url):
         
-        self.test_db()
+        传入一个show_page_url返回所有电影信息
         
-        self.iter_show_page_url = self.get_all_show_page_url_yield()
+    def get_all_show_page_url(self):
         
+        获取网站所有的show_page_url
         
-    ######特征函数#######
-    
-    def test_db(self):
-              
-        creart_sql = '''\
+    def get_all_show_page_url_yield(self):
         
-            CREATE TABLE IF NOT EXISTS film_info(
-            
-            
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    
-                    name TEXT,
-                    
-                    url  TEXT UNIQUE,
-                    
-                    update_time  TEXT,
-                    
-                    types  TEXT,
-                    
-                    status TEXT NULL
-            
-            
-            )
-        
-        '''
-        
-        
-        self.cursor_lock.acquire()
-        
-        self.cursor.execute(creart_sql)
-        self.conn.commit()
-        
-        self.cursor_lock.release()
+        获取网站所有的show_page_url的迭代器
         
     
-    def split_info(self, info_str):
+    
+    '''
+    
+    domain = 'https://www.subo8988.com/'
+    
+    
+    def split_info(self, info_str):#一个用在清洗数据的方法
         
         if '/' in info_str:#表示导演用/分割开来
             
@@ -197,13 +166,15 @@ class Film:
                 info = '<li><span class="tt"></span><span class="xing_vb4"><a href="(.*?)" target="_blank">(.*?)</a></span> <span class="xing_vb5">(.*?)</span> <span class="xing_vb6">(.*?)</span></li>'
                 )
         
-        info = Spider().post_info(post_url, data, encoding, **regex)
+        info = Spider().post_info(post_url, data, encoding, **regex)['info']
         
-        joint_url = 'https://www.subo8988.com'
+        #print(info)
         
-        info = [{'url':joint_url + url, 'name':name, 'types':types, 'update_time': update_time} for url, name, types, update_time in info]
+        joint_url = self.domain
         
-        return {'search_list': info, 'search_word': keyword, 'host': joint_url}
+        info = [{'url':joint_url + url[1:], 'name':name, 'types':types, 'update_time': update_time} for url, name, types, update_time in info]
+        
+        return {'search_list': info, 'search_word': keyword, 'host': self.domain}
     
     
     def get_show_page_info(self,url):
@@ -281,190 +252,16 @@ class Film:
 
             yield url.format(i)
                 
-        
-
-        
-    ###########功能区#######################
-    
-    
-        
-        
-    
-    def save_all_film_info(self):
-        
-        '''
-        功能：将https://www.subo8988.com/所有的电影信息保存到mysql中，
-        表字段为
-        
-        id
-        name
-        url
-        type
-        update_tiem
-        
-        
-        '''
-        
-        conn = sqlite3.connect('film.sqlite3')
-        
-        cursor = conn.cursor()
-        
-        creart_sql = '''\
-        
-            CREATE TABLE IF NOT EXISTS film_info(
-            
-            
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    
-                    name TEXT,
-                    
-                    url  TEXT UNIQUE,
-                    
-                    update_time  TEXT,
-                    
-                    types  TEXT,
-                    
-                    status TEXT NULL
-            
-            
-            )
-        
-        '''
-        
-        insert_sql = '''
-        
-            INSERT INTO film_info
-            
-            (name ,url, update_time, types)   
-            
-            VALUES       
-            
-            (?, ?, ?, ?)'''
-        
-        #  xiaohong"); drop user;
-        
-        cursor.execute(creart_sql)
-        conn.commit()
-               
-        
-        queue = self.get_all_show_page_url()
-        
-        
-        
-        for show_page_url in queue[10:20]:
-            
-            info = self.get_show_page_info(show_page_url)['film_list']
-            
-            start = time.time()
-            
-            '''
-            插入数据不能使用用迭代，能用批量插入一定要用批量
-            
-            for i in info:
-            
-                cursor.execute(insert_sql, [i['name'], i['url'], i['update_time'], i['types']])
-                
-                conn.commit()
-                
-            '''
-            
-            insert_list = [(i['name'], i['url'], i['update_time'], i['types']) for i in info]
-            
-            cursor.executemany(insert_sql, insert_list)
-            conn.commit()
-                
-            print('用时', time.time() - start)
-            
-    def work(self):
-        
-        insert_sql = '''
-        
-            INSERT INTO film_info
-            
-            (name ,url, update_time, types)   
-            
-            VALUES       
-            
-            (?, ?, ?, ?)'''
-        
-        
-        while True:
-         
-            show_page_url = next(self.iter_show_page_url)
-            
-            try:
-            
-                info = self.get_show_page_info(show_page_url)['film_list']
-                
-            except:
-                
-                self.redis.set(show_page_url, str(sys.exc_info()))
-                
-                print('出错啦', show_page_url)
-                
-            else:
-                
-      
-                insert_list = [(i['name'], i['url'], i['update_time'], i['types']) for i in info]
-                
-                self.cursor_lock.acquire()
-                    
-                try:
-                    
-                    self.cursor.executemany(insert_sql, insert_list)
-                    
-                except sqlite3.IntegrityError:
-                    
-                    print(show_page_url, '已经存在')
-                    
-                    self.cursor_lock.release()
-                    
-                else:
-                    
-                    self.conn.commit()
-                    
-                    print(show_page_url)
-                      
-                    self.cursor_lock.release()
-                
-                
-            
-    def my_thread(self):
-        
-        self.get_all_show_page_url()
-        
-        for i in range(5):
-        
-            t = threading.Thread(target = self.work)#, args = (), kwargs = {})
-            
-            t.start()
-        
-        
-        
-        
-            
-            
-        
-        
-            
-            
-            
-            
-            
-        
-        
-    
-    
-    
     
         
 if __name__ == '__main__':
     
     url = 'https://www.subo8988.com/?m=vod-index-pg-2.html'
     
-    x = Film()
+    x = FilmSubo8988()
     
-    x.my_thread()
+    #info = x.film_search('筑梦情缘')
+    
     
     
         
