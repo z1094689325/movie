@@ -7,6 +7,9 @@ This is a temporary script file.
 import sqlite3
 import threading
 import sys
+import json
+
+
 import redis
 
 
@@ -38,7 +41,7 @@ class FilmAction():
         
         self.film_object = film_object
         
-        self.redis = redis.Redis(host = '192.168.2.107', port = '6379', password = '1', db = '5')
+        self.r = redis.StrictRedis(host = '192.168.2.107', port = '6379', password = '1', db = '5', decode_responses = True)
         
         self.conn = sqlite3.connect('film.sqlite3', check_same_thread = False)
         
@@ -149,16 +152,79 @@ class FilmAction():
             t.start()
             
             
-    def search_detail(self, kewword):
+    def search_detail(self, keyword, page = None):
         
-        search_info = self.film_object.film_search(kewword)['search_list']
+        if page == None:
+            
+            page = 0
+        
+        search_info = self.film_object.film_search(keyword)['search_list'][page * 5 : (page+1)*5]
+        
+        #detail_search_list = [self.film_object.get_film_info(i['url'])  for i in search_info]
+        
+        detail_search_list = []
+        
+        def run(url):
+            
+            detail_search_list.append(self.film_object.get_film_info(url))
         
         
+        threads = []
         
-        detail_search_list = [self.film_object.get_film_info(i['url'])  for i in search_info]
+        for i in range(5):
+            
+            try:
+            
+                url = search_info.pop()['url']
+                
+            except IndexError:
+                
+                print('search_detail, 任务队列完成')
+                
+                break
+                
+            else:
+            
+            
         
+                t = threading.Thread(target = run, args = (url,))
+                
+                threads.append(t)
+                
+                t.start()
+                
+        for t in threads:
+                
+            t.join()
+            
+            
+            
+        self.r.set(keyword, json.dumps({'info' :detail_search_list}))
+        
+        
+        #self.r.hmset(keyword,{'info' :detail_search_list})
+            
+               
         return {'info' :detail_search_list}
+    
+    
+    def search_detail_redis(self, keyword):
         
+        if self.r.exists(keyword):
+            
+            return json.loads(self.r.get(keyword))
+        
+            #self.r.hget(keyword)
+        else: 
+            
+            return self.search_detail()
+            
+            
+            
+            
+        
+    
+    
     
 if __name__ == '__main__':
     
@@ -166,7 +232,8 @@ if __name__ == '__main__':
     
     x = FilmAction(FilmSubo8988())
     
-    #info = x.search_detail('筑梦情缘')
+    #info = x.search_detail('我只喜欢你')
+    
     
     
         

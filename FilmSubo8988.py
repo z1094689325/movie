@@ -102,9 +102,9 @@ class FilmSubo8988:
         
         language = self.split_info(info['info'][0][5])
         
-        m3u8_list = [url  for url in info['show_list'] if url.endswith('.m3u8')]
+        m3u8_list = [url.split('$')  for url in info['show_list'] if url.endswith('.m3u8')]
         
-        yun_list = [url  for url in info['show_list'] if not url.endswith('.m3u8')]
+        yun_list = [url.split('$')  for url in info['show_list'] if not url.endswith('.m3u8')]
         
     
         film_info = dict(
