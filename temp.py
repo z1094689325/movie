@@ -4,13 +4,11 @@ Spyder Editor
 
 This is a temporary script file.
 """
-import re
 import sqlite3
 import time
 import threading
 import sys
 
-import requests
 import redis
 from spider import Spider
 
@@ -23,9 +21,52 @@ class Film:
     def __init__(self):
         
         self.redis = redis.Redis(host = '192.168.2.107', port = '6379', password = '1', db = '5')
-    
+        
+        self.conn = sqlite3.connect('film.sqlite3', check_same_thread = False)
+        
+        self.cursor = self.conn.cursor()
+        
+        self.cursor_lock = threading.Lock()
+        
         self.test_db()
+        
+        self.iter_show_page_url = self.get_all_show_page_url_yield()
+        
+        
     ######特征函数#######
+    
+    def test_db(self):
+              
+        creart_sql = '''\
+        
+            CREATE TABLE IF NOT EXISTS film_info(
+            
+            
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    
+                    name TEXT,
+                    
+                    url  TEXT UNIQUE,
+                    
+                    update_time  TEXT,
+                    
+                    types  TEXT,
+                    
+                    status TEXT NULL
+            
+            
+            )
+        
+        '''
+        
+        
+        self.cursor_lock.acquire()
+        
+        self.cursor.execute(creart_sql)
+        self.conn.commit()
+        
+        self.cursor_lock.release()
+        
     
     def split_info(self, info_str):
         
@@ -229,40 +270,23 @@ class Film:
         
         
         return self.queue
+
     
     
-    
+    def get_all_show_page_url_yield(self):
+
+        url = 'https://www.subo8988.com/?m=vod-index-pg-{}.html'
+
+        for i in range(1, 485):
+
+            yield url.format(i)
+                
+        
+
+        
     ###########功能区#######################
     
-    def test_db(self):
-        conn = sqlite3.connect('film.sqlite3')
-        
-        cursor = conn.cursor()
-        
-        creart_sql = '''\
-        
-            CREATE TABLE IF NOT EXISTS film_info(
-            
-            
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    
-                    name TEXT,
-                    
-                    url  TEXT UNIQUE,
-                    
-                    update_time  TEXT,
-                    
-                    types  TEXT,
-                    
-                    status TEXT NULL
-            
-            
-            )
-        
-        '''
-        
-        cursor.execute(creart_sql)
-        conn.commit()
+    
         
         
     
@@ -363,19 +387,16 @@ class Film:
             
             (?, ?, ?, ?)'''
         
-        conn = sqlite3.connect('film.sqlite3')
-            
-        cursor = conn.cursor()
         
         while True:
          
-            show_page_url = self.queue.pop()
+            show_page_url = next(self.iter_show_page_url)
             
             try:
             
                 info = self.get_show_page_info(show_page_url)['film_list']
                 
-            except requests.exceptions.ConnectionError:
+            except:
                 
                 self.redis.set(show_page_url, str(sys.exc_info()))
                 
@@ -385,12 +406,28 @@ class Film:
                 
       
                 insert_list = [(i['name'], i['url'], i['update_time'], i['types']) for i in info]
+                
+                self.cursor_lock.acquire()
                     
-                cursor.executemany(insert_sql, insert_list)
+                try:
+                    
+                    self.cursor.executemany(insert_sql, insert_list)
+                    
+                except sqlite3.IntegrityError:
+                    
+                    print(show_page_url, '已经存在')
+                    
+                    self.cursor_lock.release()
+                    
+                else:
+                    
+                    self.conn.commit()
+                    
+                    print(show_page_url)
+                      
+                    self.cursor_lock.release()
                 
-                conn.commit()
                 
-                print(show_page_url)
             
     def my_thread(self):
         
