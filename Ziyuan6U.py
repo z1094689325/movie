@@ -10,7 +10,7 @@ from spider import Spider
 
 class Zy6U:
     '''
-    et_page(self) 获取页数
+    get_page(self) 获取页数
     
     def split_info(self, info_str) 分割字符串
     
@@ -18,18 +18,18 @@ class Zy6U:
     
     film_search(self, keyword, encoding = None) 关键字查询
     
-    get_all_show_page(self) 获取所有页的url
+    get_all_show_page_url(self) 获取所有页的url
     
-    get_all_show_page_yield(self) 返回url的迭代器
+    get_all_show_page_url_yield(self) 返回url的迭代器
     
-    get_all_page(self,url) 获取每页的50条电影字段
+    get_show_page_info(self,url) 获取每页的50条电影字段
     '''
     
     
     
     def __init__(self):
         self.page = self.get_page()
-        self.host = 'http://zy.ataoju.com/index.php/'
+        self.domain = 'http://zy.ataoju.com/'
         
         
     def get_page(self):
@@ -112,37 +112,39 @@ class Zy6U:
                 info = '<li><span class="tt"></span><span class="xing_vb4"><a href="(.*?)" target="_blank">(.*?)</a></span> <span class="xing_vb5">(.*?)</span> <span class="xing_vb[67]">(.*?)</span></li>'
                 )
         info = Spider().post_info(post_url,data,**regex)
-        info = [{'url':self.host+i[0],'name':i[1],'types':i[2],'update_time':i[3]} for i in info['info']]
-        return {'search_word':info}
+        info = [{'url':self.domain+i[0],'name':i[1],'types':i[2],'update_time':i[3]} for i in info['info']]
+        return {'search_list': info, 'search_word': keyword, 'domain': self.domain}
     
     
     #获取所有的url
-    def get_all_show_page(self):
+    def get_all_show_page_url(self):
         join_url = 'http://zy.ataoju.com/?m=vod-index-pg-{}.html'
         self.queue = [join_url.format(i) for i in range(1,self.page+1)]
         return self.queue
     
     #获取url 优化
-    def get_all_show_page_yield(self):
+    def get_all_show_page_url_yield(self):
         join_url = 'http://zy.ataoju.com/?m=vod-index-pg-{}.html'
         for i in range(1,self.page+1):
             yield join_url.format(i)
 
 
-    def get_all_page(self,url):
+    def get_show_page_info(self,url):
         regex = dict(
                 info = '<li><span class="tt"></span><span class="xing_vb4"><a href="(.*?)" target="_blank">(.*?)</a></span> <span class="xing_vb5">(.*?)</span> <span class="xing_vb[67]">(.*?)</span></li>'
                 )
         info = Spider().get_info(url,**regex)['info']
-        info = [{'url':self.host+i[0],'name':i[1],'types':i[2],'update_time':i[3]} for i in info]
-        return {'page_info':info}
+        info = [{'url':self.domain+i[0],'name':i[1],'types':i[2],'update_time':i[3]} for i in info]
+        return {'film_list':info}
     
     
 if __name__ == '__main__' :
     z = Zy6U()
     url = 'http://zy.ataoju.com/?m=vod-index-pg-40.html'
+    print(z.page)
 #    info = z.get_film_info('http://zy.ataoju.com/?m=vod-detail-id-61989.html')
 #    page = z.get_page()
-#    info1 = z.film_search('筑梦情缘')
+    info1 = z.film_search('筑梦情缘')
 #    urls = z.get_all_show_page()
-    info3 = z.get_all_page(url)
+#    info3 = z.get_all_page(url)
+#    print(type(z.get_all_show_page_yield()))
