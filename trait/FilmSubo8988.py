@@ -34,7 +34,7 @@ class FilmSubo8988:
     
     '''
     
-    domain = 'http://www.zuixinzy.com/'
+    domain = 'https://www.subo8988.com/'
     
     
     def split_info(self, info_str):#一个用在清洗数据的方法
@@ -153,7 +153,7 @@ class FilmSubo8988:
     
     def film_search(self, keyword, encoding = None):
         
-        post_url = 'http://www.zuixinzy.com/index.php?m=vod-search'
+        post_url = 'https://www.subo8988.com/index.php?m=vod-search'
         
         data = {
                 'wd': keyword,
@@ -235,9 +235,9 @@ class FilmSubo8988:
         
         '''
         
-        url = 'http://www.zuixinzy.com/?m=vod-index-pg-{}.html'
+        url = 'https://www.subo8988.com/?m=vod-index-pg-{}.html'
         
-        self.queue = [url.format(i) for i in range(1, 553)]
+        self.queue = [url.format(i) for i in range(1, 485)]
         
         
         return self.queue
@@ -246,9 +246,9 @@ class FilmSubo8988:
     
     def get_all_show_page_url_yield(self):
 
-        url = 'http://www.zuixinzy.com/?m=vod-index-pg-{}.html'
+        url = 'https://www.subo8988.com/?m=vod-index-pg-{}.html'
 
-        for i in range(1, 553):
+        for i in range(1, 485):
 
             yield url.format(i)
                 
@@ -256,11 +256,11 @@ class FilmSubo8988:
         
 if __name__ == '__main__':
     
-    url = 'http://www.zuixinzy.com/?m=vod-detail-id-27606.html'
+    url = 'https://www.subo8988.com/?m=vod-index-pg-2.html'
     
     x = FilmSubo8988()
     
-    info = x.get_film_info(url)
+    #info = x.film_search('筑梦情缘')
     
     
     

@@ -113,7 +113,7 @@ class Zy6U:
                 )
         info = Spider().post_info(post_url,data,**regex)
         info = [{'url':self.domain+i[0],'name':i[1],'types':i[2],'update_time':i[3]} for i in info['info']]
-        return {'search_list': info, 'search_word': keyword, 'domain': self.domain}
+        return {'search_list': info, 'search_word': keyword, 'host': self.domain}
     
     
     #获取所有的url
