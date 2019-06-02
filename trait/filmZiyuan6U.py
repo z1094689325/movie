@@ -4,11 +4,14 @@ Created on Wed May 29 20:20:46 2019
 6u资源站
 @author: 张茗杰
 """
+__author__ = '张茗杰'
 
 from spider import Spider
 
 
 class FilmZiyuan6U:
+    
+    
     '''
     get_page(self) 获取页数
     
@@ -143,6 +146,7 @@ if __name__ == '__main__' :
 #    info = z.get_film_info('http://zy.ataoju.com/?m=vod-detail-id-61989.html')
 #    page = z.get_page()
     info1 = z.film_search('筑梦情缘')
+    __author__
 #    urls = z.get_all_show_page()
 #    info3 = z.get_all_page(url)
 #    print(type(z.get_all_show_page_yield()))
