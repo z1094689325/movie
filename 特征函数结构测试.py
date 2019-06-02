@@ -12,8 +12,16 @@ import types
 
 class TestFilmTrait(unittest.TestCase):
     
-        
+    
+    #测试所需要的参数
+            
     trait_obj = Zy6U()#要测试的类实例请自行修改
+    
+    test_film_info_arg = ''
+    
+    test_get_show_page_info_arg = ''
+    
+    #######end###########
     
     show_page_list = trait_obj.get_all_show_page_url()[:20]
     
@@ -86,17 +94,19 @@ class TestFilmTrait(unittest.TestCase):
             
     def test_film_info(self):
         
-        film_info=self.trait_obj.get_film_info('http://zy.ataoju.com/?m=vod-detail-id-61989.html')
+        film_info=self.trait_obj.get_film_info(self.test_film_info_arg)
         
-        self.assertTrue(isinstance(film_info,dict))
+        self.assertTrue(isinstance(film_info,dict))#检测返回结果类型
         
-        self.assertTrue(bool(film_info))
+        self.assertTrue(bool(film_info))#检测是否正常返回值
         
         self.assertTrue(isinstance([i for i in film_info.values()],list))
         
+        self.asserTrue(film_info['name'])
+        
     def test_get_show_page_info(self):
         
-        show_page=self.trait_obj.get_show_page_info('http://zy.ataoju.com/?m=vod-index-pg-40.html')
+        show_page=self.trait_obj.get_show_page_info()
         
         self.assertTrue(isinstance(show_page,dict))
         

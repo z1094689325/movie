@@ -30,7 +30,7 @@ class Spider:
     
     def post_html(self, url, data, encoding = None):
         
-        r = requests.post(url, headers = self.headers, data = data, verify = False)
+        r = requests.post(url, headers = self.headers, data = data)
         
         if encoding == None:
         

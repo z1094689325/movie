@@ -4,6 +4,7 @@ Created on Thu May 30 08:13:53 2019
 
 @author: 夜刀神十香
 """
+__author__ = '夜刀神十香'
 
 from spider import Spider
 

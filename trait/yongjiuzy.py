@@ -8,7 +8,7 @@ Created on Thu May 30 07:55:05 2019
 from spider import Spider
 
 
-class YongJiuSpider(object):
+class YongJiuSpider:
     '''
     def __init__(self):
         执行初始化操作
