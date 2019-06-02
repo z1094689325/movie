@@ -6,14 +6,14 @@ Created on Fri May 31 09:28:58 2019
 """
 import unittest
 
-from trait.ziyuan6U import Ziyuan6U
+from trait.filmZiyuan6U import FilmZiyuan6U
 
 import types
 
 class TestFilmTrait(unittest.TestCase):
     
         
-    trait_obj = Ziyuan6U()#要测试的类实例请自行修改
+    trait_obj = FilmZiyuan6U()#要测试的类实例请自行修改
     
     show_page_list = trait_obj.get_all_show_page_url()[:20]
     
