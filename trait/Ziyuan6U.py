@@ -8,7 +8,7 @@ Created on Wed May 29 20:20:46 2019
 from spider import Spider
 
 
-class Zy6U:
+class Ziyuan6U:
     '''
     get_page(self) 获取页数
     
@@ -25,12 +25,10 @@ class Zy6U:
     get_show_page_info(self,url) 获取每页的50条电影字段
     '''
     
-    
+    domain =  'http://zy.ataoju.com/'
     
     def __init__(self):
         self.page = self.get_page()
-        self.domain = 'http://zy.ataoju.com/'
-        
         
     def get_page(self):
         url = 'http://zy.ataoju.com/index.php'
@@ -139,7 +137,7 @@ class Zy6U:
     
     
 if __name__ == '__main__' :
-    z = Zy6U()
+    z = Ziyuan6U()
     url = 'http://zy.ataoju.com/?m=vod-index-pg-40.html'
     print(z.page)
 #    info = z.get_film_info('http://zy.ataoju.com/?m=vod-detail-id-61989.html')
