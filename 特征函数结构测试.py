@@ -6,14 +6,14 @@ Created on Fri May 31 09:28:58 2019
 """
 import unittest
 
-from trait.ZY1977 import Zy1977
+from trait.Ziyuan6U import Zy6U
 
 import types
 
 class TestFilmTrait(unittest.TestCase):
     
         
-    trait_obj = Zy1977()#要测试的类实例请自行修改
+    trait_obj = Zy6U()#要测试的类实例请自行修改
     
     show_page_list = trait_obj.get_all_show_page_url()[:20]
     
@@ -84,9 +84,29 @@ class TestFilmTrait(unittest.TestCase):
             
             self.assertTrue(bool(search_list[0]['update_time']))#每个搜索结果要有update_time键
             
-    
+    def test_film_info(self):
         
-
+        film_info=self.trait_obj.get_film_info('http://zy.ataoju.com/?m=vod-detail-id-61989.html')
+        
+        self.assertTrue(isinstance(film_info,dict))
+        
+        self.assertTrue(bool(film_info))
+        
+        self.assertTrue(isinstance([i for i in film_info.values()],list))
+        
+    def test_get_show_page_info(self):
+        
+        show_page=self.trait_obj.get_show_page_info('http://zy.ataoju.com/?m=vod-index-pg-40.html')
+        
+        self.assertTrue(isinstance(show_page,dict))
+        
+        self.assertTrue(bool(show_page))
+        
+        self.assertTrue(bool(show_page['film_list']))
+        if show_page:
+            self.assertTrue(show_page['film_list'][0],list)
+            self.assertTrue(bool(show_page['film_list'][0]))
+        
     def test_isupper(self):
         self.assertTrue('FOO'.isupper())
         self.assertFalse('Foo'.isupper())
