@@ -16,7 +16,7 @@ class Spider:
             }    
     def get_html(self, url, encoding = None):
         
-        r = requests.get(url, headers = self.headers)
+        r = requests.get(url, headers = self.headers, timeout = 2)
         
         if encoding == None:
         
@@ -30,7 +30,7 @@ class Spider:
     
     def post_html(self, url, data, encoding = None):
         
-        r = requests.post(url, headers = self.headers, data = data)
+        r = requests.post(url, headers = self.headers, data = data, timeout = 2)
         
         if encoding == None:
         
