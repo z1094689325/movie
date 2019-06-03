@@ -2,8 +2,9 @@
 """
 Created on Fri May 31 07:46:46 2019
 
-@author: 鑫哥
+@author: 李鑫
 """
+__author__:"李鑫"
 import re#先导入python的内置库
 
 import requests#再导入第三方库
@@ -145,30 +146,27 @@ class Film:
 
         regex = dict(
 
-            info = '\<td class="l"><a href="(.*?)" target="_blank">(.*?)<font color="red">(.*?)</font>\s+?\<td><a href=".*?" target="_blank">立即播放</a></td>\s+?\<td><a href="(.*?)" target="_blank">(.*?)</a></td>\s+?\<td><p><font color="Black">(.*?)</font></p></td>\s+?\<td><span class="bts_1"><font color="#000000">(.*?)</font></span></td>\s+?\<td><font color="#2932E1">(.*?)</font></td>'
+            info = '\
+<td class="l"><a href="(.*?)" target="_blank">(.*?)<font color="red">(.*?)</font>\s+?\
+<td><a href=".*?" target="_blank">立即播放</a></td>\s+?\
+<td><a href="(.*?)" target="_blank">(.*?)</a></td>\s+?\
+<td><p><font color="Black">(.*?)</font></p></td>\s+?\
+<td><span class="bts_1"><font color="#000000">(.*?)</font></span></td>\s+?\
+<td><font color="#2932E1">(.*?)</font></td>'
             )
 
         info = Spider().post_info(post_url, data, encoding = 'utf-8', **regex)
         
         joint_url = self.domain
         
-        info = [dict(
+        #这里一定要用循环遍历
         
-        url = joint_url + info['info'][0][0],
         
-        name = info['info'][0][1] + info['info'][0][2],
+        info = [{'url' : joint_url + url, 'name' :name + name1,\
+                'types_url' : joint_url + types_url, 'types' : types,\
+                'area' : area, 'status' : status, 'update_time' : update_time}\
+                for url, name, name1, types_url, types, area, status, update_time in info['info']]
         
-        types_url =  joint_url + info['info'][0][3],
-        
-        types = info['info'][0][4],
-        
-        area = info['info'][0][5],
-        
-        status = info['info'][0][6],
-        
-        update_time = info['info'][0][7]
-        
-        )]
         
         return {'search_list': info, 'search_word' : keyword, 'host' : self.domain}
     
@@ -257,6 +255,6 @@ if __name__=='__main__':
     x = Film()
 #    x.get_film_info(url)
 #x.get_show_page_info()
-#    info = x.film_search('一拳超人')
+    info = x.film_search('银魂')
 #    x.get_show_page_info(next(x.pageUrl))
 #    x.get_show_page_info(url)
