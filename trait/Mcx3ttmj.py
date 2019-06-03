@@ -6,8 +6,10 @@ This is a temporary script file.
 """
 from spider import Spider
 
+__author__ = '孟辰宣'
 
-class S3ttmj:
+
+class Mcx3ttmj:
     
     '''
     def get_film_info(self, url, encoding = None): 
@@ -178,7 +180,7 @@ class S3ttmj:
         
         joint_url = self.domain
         
-        info = [{'url':joint_url + url[1:], 'name':name, 'types':types, 'update_time': update_time} for url, name, types, update_time in info]
+        info = [{'url':joint_url + url[1:], 'name':name, 'area':area,'types':types, 'update_time': update_time} for url, name, area,types, update_time in info]
         
         return {'search_list': info, 'search_word': keyword, 'host': self.domain}
     
@@ -249,7 +251,7 @@ if __name__ == '__main__':
     
     url = 'http://3ttmj.com/?s=Home-vod-read-id-19867.html'
     
-    x = S3ttmj()
+    x = Mcx3ttmj()
     
     #info = x.get_film_info(url)
 #    info = x.film_search('射雕英雄传')
