@@ -30,9 +30,6 @@ class FilmZiyuan6U:
     
     domain =  'http://zy.ataoju.com/'
     
-    def __init__(self):
-        self.page = self.get_page()
-        
     def get_page(self):
         url = 'http://zy.ataoju.com/index.php'
         regex = dict(
@@ -119,14 +116,16 @@ class FilmZiyuan6U:
     
     #获取所有的url
     def get_all_show_page_url(self):
+        page = self.get_page()
         join_url = 'http://zy.ataoju.com/?m=vod-index-pg-{}.html'
-        self.queue = [join_url.format(i) for i in range(1,self.page+1)]
+        self.queue = [join_url.format(i) for i in range(1,page+1)]
         return self.queue
     
     #获取url 优化
     def get_all_show_page_url_yield(self):
+        page = self.get_page()
         join_url = 'http://zy.ataoju.com/?m=vod-index-pg-{}.html'
-        for i in range(1,self.page+1):
+        for i in range(1,page+1):
             yield join_url.format(i)
 
 
@@ -142,10 +141,9 @@ class FilmZiyuan6U:
 if __name__ == '__main__' :
     z = FilmZiyuan6U()
     url = 'http://zy.ataoju.com/?m=vod-index-pg-40.html'
-    print(z.page)
 #    info = z.get_film_info('http://zy.ataoju.com/?m=vod-detail-id-61989.html')
 #    page = z.get_page()
-    info1 = z.film_search('筑梦情缘')
+    info1 = z.get_all_show_page_url_yield()
     __author__
 #    urls = z.get_all_show_page()
 #    info3 = z.get_all_page(url)
