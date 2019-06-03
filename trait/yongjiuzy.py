@@ -10,8 +10,6 @@ from spider import Spider
 
 class YongJiuSpider:
     '''
-    def __init__(self):
-        执行初始化操作
     def get_film_info(self, url, encoding = None): 
         传入一个电影详情链接，清洗该链接数据
     def film_search(self, keyword, encoding = None):
@@ -23,9 +21,7 @@ class YongJiuSpider:
     def get_all_show_page_url_yield(self):
         获取网站所有的show_page_url的迭代器
     '''
-    def __init__(self):
-        '''初始化'''
-        self.domain = 'http://www.yongjiuzy.cc/'
+    domain = 'http://www.yongjiuzy.cc/'
     
     def split_info(self, info_str):#一个用在清洗数据的方法
         '''清洗数据'''
