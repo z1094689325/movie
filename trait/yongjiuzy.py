@@ -10,10 +10,6 @@ from spider import Spider
 
 class YongJiuSpider:
     '''
-    def __init__(self):
-        执行初始化操作
-    def getPageMax(self):
-        获取到最大页数
     def get_film_info(self, url, encoding = None): 
         传入一个电影详情链接，清洗该链接数据
     def film_search(self, keyword, encoding = None):
@@ -25,18 +21,7 @@ class YongJiuSpider:
     def get_all_show_page_url_yield(self):
         获取网站所有的show_page_url的迭代器
     '''
-    def __init__(self):
-        '''初始化'''
-        self.domain = 'http://www.yongjiuzy.cc/'
-        self.pageMax=self.getPageMax()#实例化最大页数
-        
-    def getPageMax(self):#1
-        '''获取到最大页数'''
-        regex = dict(
-            info = '当前:1/(\d+)页&nbsp;',
-        )
-        pageMax = int(Spider().get_info(self.domain, **regex)['info'][0])
-        return pageMax
+    domain = 'http://www.yongjiuzy.cc/'
     
     def split_info(self, info_str):#一个用在清洗数据的方法
         '''清洗数据'''
@@ -152,13 +137,13 @@ class YongJiuSpider:
     def get_all_show_page_url(self):
         '''获取所有的页面url列表'''
         url = 'http://www.yongjiuzy.cc/?m=vod-index-pg-{}.html'
-        self.queue = [url.format(i) for i in range(1, self.pageMax+1)]
+        self.queue = [url.format(i) for i in range(1, 480+1)]
         return self.queue
 
     def get_all_show_page_url_yield(self):
         '''页面url生成器'''
         url = 'http://www.yongjiuzy.cc/?m=vod-index-pg-{}.html'
-        for i in range(1, self.pageMax+1):
+        for i in range(1, 480+1):
             yield url.format(i)
                 
         
