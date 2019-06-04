@@ -8,7 +8,9 @@ Created on Mon May 27 14:18:44 2019
 
 @author: 杨坤
 """
+__author__ = '$杨坤'
 from spider import Spider
+
 
 
 class Rebozy:
