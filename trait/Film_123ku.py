@@ -6,12 +6,19 @@ Created on Wed May 29 17:04:28 2019
 """
 from spider import Spider
 import re
-
+from math import ceil
 class Film123ku:
     
     
     domain = 'http://www.123ku.com/'
     
+    def get_page(self,url,**regex):
+        regex=dict(
+                page='123资源站影片共有：<strong>(.*?)</strong>'
+                )
+        page=Spider().get_info(url,**regex)['page'][0]
+        page=ceil(int(page)/50)
+        return page
     
     def get_film_info(self,url,encoding=None):
         
@@ -98,14 +105,16 @@ class Film123ku:
                 info = '<li><span class="tt"></span><span class="xing_vb4"><img class="new" src="/template/www_api_xin/images/new/49.gif">&nbsp<a href="(.*?)">(.*?)<img class="hot" src="/template/www_api_xin/images/hot/hot.gif"></font></a></span> <span class="xing_vb5">(.*?)</span> <span class="xing_vb6">(.*?)</span></li>'
                 )
         info = Spider().get_info(url,encoding = 'utf-8',  **regex)['info']
-        info = [dict(url = i[0], name = i[1].split('&nbsp')[0], types = i[2], update_time = i[3]) for i in info]
+        info = [dict(url = self.domain+i[0], name = i[1].split('&nbsp')[0], types = i[2], update_time = i[3]) for i in info]
         return {'film_list': info}
     
     def get_all_show_page_url(self):
 
         url = 'http://www.123ku.com/?m=vod-index-pg-{}.html'
         
-        self.queue = [url.format(i) for i in range(1, 316)]
+        page=self.get_page('http://www.123ku.com/')
+        
+        self.queue = [url.format(i) for i in range(1, page+1)]
         
         return self.queue
     
@@ -113,8 +122,10 @@ class Film123ku:
     def get_all_show_page_url_yield(self):
 
         url = 'http://www.123ku.com/?m=vod-index-pg-{}.html'
-
-        for i in range(1, 316):
+        
+        page=self.get_page('http://www.123ku.com/')
+        
+        for i in range(1, page+1):
 
             yield url.format(i)
     
