@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+                # -*- coding: utf-8 -*-
 """
 Spyder Editor
 
@@ -110,8 +110,8 @@ info = '\
         score = self.split_info(info['info'][0][0])
         #别名
         alias = self.split_info(info['info'][0][1])
-        #状态
-        state = self.split_info(info['info'][0][2])
+#        #状态
+#        state = self.split_info(info['info'][0][2])
         #时间
         date = self.split_info(info['info'][0][3])
         #主演
@@ -143,7 +143,7 @@ info = '\
         film_info = dict(
             score = score,
             alias = alias,
-            state = state,
+#            state = state,
             date = date,
             actor = actor,
             director = director,
@@ -178,7 +178,7 @@ info = '\
              
 info='<li class="clearfix">\s+?\
 	<h3 class="title">\s+?\
-		<a href="(.*?)" title="(.*?)">.*?<em>(.*?)</em></a>\s+?\
+		<a href="(.*?)" title="(.*?)">.*?<em>.*?</em></a>\s+?\
 	</h3>\s+?\
 	<span class="type">\s+?\
 		<a href=".*?">(.*?)</a>\s+?\
@@ -194,7 +194,7 @@ info='<li class="clearfix">\s+?\
         
         joint_url = self.domain
         
-        info = [{'url':joint_url + url, 'name':name,'types':types,'state':state, 'update_time': update_time} for url, name,state,types, update_time in info]
+        info = [{'url':joint_url + url, 'name':name,'types':types, 'update_time': update_time} for url, name,types, update_time in info]
         
         return {'search_list': info, 'search_word': keyword, 'host': self.domain}
     
@@ -236,7 +236,7 @@ info='<li class="clearfix">\s+?\
               
 info='<li class="clearfix">\s+?\
 	<h3 class="title">\s+?\
-		<a href="(.*?)" title="(.*?)">.*? <em>(.*?)</em></a>\s+?\
+		<a href="(.*?)" title="(.*?)">.*? <em>.*?</em></a>\s+?\
 	</h3>\s+?\
 	<span class="type">\s+?\
 		<a href=".*?">(.*?)</a>\s+?\
@@ -249,7 +249,9 @@ info='<li class="clearfix">\s+?\
         info = Spider().get_info(url,encoding = 'utf-8',  **regex)['info']
         
 #        return info
-        info = [dict(url = i[0], name = i[1], state=i[2],types = i[3], update_time = i[4]) for i in info]
+#        info = [dict(url = self.dimain+i[0], name = i[1],types = i[2], update_time = i[3]) for i in info]
+        
+        info = [{'url':self.domain+i[0],'name':i[1],'types':i[2],'update_time':i[3]} for i in info]
         
         
         
