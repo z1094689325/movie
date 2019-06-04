@@ -31,7 +31,7 @@ class Film135Zy:
     '''
     
     domain='http://www.135zy.vip'
-    
+            
     def film_search(self,keyword,encoding=None):
         post_url='http://www.135zy.vip/index.php?m=vod-search'
         
@@ -41,7 +41,6 @@ class Film135Zy:
                 }
         
         regex = dict(
-                
                 info = '<li><span class="tt"></span><span class="xing_vb4"><a href="(.*?)" target="_blank">(.*?)</a></span><span class="xing_vb5">(.*?)</span><span class="xing_vb6">(.*?)</span>'
                 )
         
@@ -53,8 +52,8 @@ class Film135Zy:
         
         info = [{'url':joint_url + url, 'name':name, 'types':types, 'update_time': update_time} for url, name, types, update_time in info] 
         return {'search_list': info, 'search_word': keyword, 'host': self.domain}
-
-        
+    
+   
         
     ##获取一级页面总页数和所有url
     def get_all_show_page_url(self):
@@ -82,8 +81,7 @@ class Film135Zy:
                 href='''<ul><li><span class="tt"></span><span class="xing_vb4"><a href="(.*?)" target="_blank">(.*?)</a></span><span class="xing_vb5">(.*?)</span><span class="xing_vb[67]">(.*?)</span></li></ul>'''
                 )
         one_info=Spider().get_info(url,**regex)['href']
-        one_info=[dict(href=self.domain+i[0],name=i[1].split(' ')[0],types=i[2],update_time=i[3]) for i in one_info]
-        print(one_info)
+        one_info=[dict(url=self.domain+i[0],name=i[1].split(' ')[0],types=i[2],update_time=i[3]) for i in one_info]
         return {'film_list':one_info}
     
     #3用于数据清洗
