@@ -6,23 +6,20 @@ Created on Fri May 31 09:28:58 2019
 """
 import unittest
 
-from trait.filmZiyuan6U import FilmZiyuan6U
+from trait.FilmSubo8988 import FilmSubo8988
 
 import types
 
 class TestFilmTrait(unittest.TestCase):
     
-
-    
-    #测试所需要的参数
+        
+     #测试所需要的参数
             
-    trait_obj = Zy6U()#要测试的类实例请自行修改
+    trait_obj = FilmSubo8988()#要测试的类实例请自行修改
 
-    test_film_info_arg = ''
+    test_film_info_arg = ''#详情页网站
     
-    test_get_show_page_info_arg = ''
-    
-    #######end###########
+    test_get_show_page_info_arg = '' #首页url
     
     show_page_list = trait_obj.get_all_show_page_url()[:20]
     
@@ -97,26 +94,29 @@ class TestFilmTrait(unittest.TestCase):
         
         film_info=self.trait_obj.get_film_info(self.test_film_info_arg)
         
-        self.assertTrue(isinstance(film_info,dict))#检测返回结果类型
+        self.assertTrue(isinstance(film_info,dict))
         
-        self.assertTrue(bool(film_info))#检测是否正常返回值
+        self.assertTrue(bool(film_info))
         
         self.assertTrue(isinstance([i for i in film_info.values()],list))
         
-        self.asserTrue(film_info['name'])
-        
     def test_get_show_page_info(self):
         
-        show_page=self.trait_obj.get_show_page_info()
+        show_page=self.trait_obj.get_show_page_info(self.test_get_show_page_info_arg)
         
         self.assertTrue(isinstance(show_page,dict))
         
         self.assertTrue(bool(show_page))
         
         self.assertTrue(bool(show_page['film_list']))
+        
         if show_page:
-            self.assertTrue(show_page['film_list'][0],list)
-            self.assertTrue(bool(show_page['film_list'][0]))
+            
+            self.assertTrue(bool(show_page['film_list'][0]['url']))
+            
+            self.assertTrue(bool(show_page['film_list'][0]['name']))
+            
+            self.assertTrue(bool(show_page['film_list'][0]['update_time']))
         
     def test_isupper(self):
         self.assertTrue('FOO'.isupper())
