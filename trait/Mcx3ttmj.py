@@ -5,6 +5,7 @@ Spyder Editor
 This is a temporary script file.
 """
 from spider import Spider
+import re
 
 __author__ = '孟辰宣'
 
@@ -72,9 +73,9 @@ class Mcx3ttmj:
                 
                 info = '\
 <li><span>分类：</span>(.*?)</li>\s+?\
-<li><span>导演：</span>(.*?)</li>\s+?\
+<li><span>导演：</span><(.*?)" target="_blank">(.*?)</a></li>\s+?\
 <!-- <li><span>编剧：</span>(.*?)</li> -->\s+?\
-<li><span>主演：</span><a href="(.*?)" target="_blank">(.*?)</a> <a href="(.*?)" target="_blank">(.*?)</a> <a href="(.*?)" target="_blank">(.*?)</a> <a href="(.*?)" target="_blank">(.*?)</a></li>\s+?\
+<li><span>主演：</span>(.*?)</li>\s+?\
 <li><span>语言：</span>(.*?)</li>\s+?\
 <li><span>地区：</span>(.*?)</li>\s+?\
 <li><span>集数：</span>(.*?)</li>\s+?\
@@ -89,17 +90,21 @@ class Mcx3ttmj:
                 )
         info = Spider().get_info(url,encoding = encoding , **regex)
         
-#        return info
+        info1 = [re.findall('<a href="(.*?)" target="_blank">(.*)',i) for i in info['info'][0][4].split('</a>') if i != '']
+        
+#        return info1
         #类型
         types = self.split_info(info['info'][0][0])
-#       导演  
+#        导演链接
         director = self.split_info(info['info'][0][1])
+#       导演  
+        director = self.split_info(info['info'][0][2])
 #       编剧
-        Screenwriter = self.split_info(info['info'][0][2])
+        Screenwriter = self.split_info(info['info'][0][3])
 #       主演链接
-        performer_url = [i for i in info['info'][0] if i.startswith('/?s=')]
+        performer_url = [i[0][0] for i in info1]
 #       主演
-        performer = [i for i in info['info'][0][4:-6] if not i.startswith('/?s=')]
+        performer = [i[0][1] for i in info1]
 #       语言
         language = self.split_info(info['info'][0][-6])
 #        地区
@@ -213,7 +218,7 @@ class Mcx3ttmj:
         
         info = [dict(url = i[0], name = i[1].split('&nbsp;')[0] ,area = i[2] , types = i[3] , update_time = i[4]) for i in regex['info']]
         
-        return {'frist_info':info}
+        return {'film_list':info}
 
         
         
@@ -249,15 +254,33 @@ if __name__ == '__main__':
     
 #    url = 'http://3ttmj.com/?s=Home-Index-index-p-1.html'
     
-    url = 'http://3ttmj.com/?s=Home-vod-read-id-19867.html'
+    url = 'http://3ttmj.com/?s=Home-vod-read-id-19868.html'
     
     x = Mcx3ttmj()
     
-    #info = x.get_film_info(url)
+    #
+    
+    
 #    info = x.film_search('射雕英雄传')
     
-#a = (1,2,3,4,5,6,8,9,9,0,9,7,5,6,7,8,9)
+#a = (1,2,3,4,5,6,8,9,9,0,9,7,5,6,7,8,4,56,78,90,77,11,32)
 #b = a[4:-7]
-        
+#info2 = []
+#a = [re.findall('<a href="(.*?)" target="_blank">(.*?)',i) for i in info['info'][0][5].split('</a>') if i.startswith('<a href=')]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
