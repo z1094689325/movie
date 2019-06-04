@@ -1,12 +1,17 @@
 # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """
+Spyder Editor
+
 @author: 贾荀淘
+
+This is a temporary script file.
 """
+__author__ = '贾荀淘'
 from spider import Spider
 
-import re
 
-class Film135:
+class Film_kubo:
     
     '''
     def get_film_info(self, url, encoding = None): 
@@ -28,14 +33,12 @@ class Film135:
     def get_all_show_page_url_yield(self):
         
         获取网站所有的show_page_url的迭代器
-     def get_all_page(self,url):
-         
-         动态获取网站的页数
+        
     
     
     '''
     
-    domain = 'http://www.135zy.vip/'
+    domain = 'http://www.kubozy.net/'
     
     
     def split_info(self, info_str):#一个用在清洗数据的方法
@@ -62,16 +65,32 @@ class Film135:
     
     def get_film_info(self, url, encoding = None):
         
-                
+            
+        
         regex = dict(
                               
                 intro = '<div class="vodplayinfo">(.*?)</div>',
                 
-                name = '<div class="vodh"><h2>(.*?)</h2><span>(.*?)</span><label>(.*?)</label></div>',
+                name = '<h2>(.*?)</h2>\s+?<span>(.*?)</span>\s+?<label>(.*?)</label>',
                 
-                info = '<li>别名：<span>(.*?)</span></li><li>导演：<span>(.*?)</span></li><li>主演：<span>(.*?)</span></li><li>类型：<span>(.*?)</span></li><li>地区：<span>(.*?)</span></li><li>语言：<span>(.*?)</span></li><li>上映：<span>(.*?)</span></li><li>更新：<span>(.*?)</span></li>',
+                info = '\
+<li>别名：<span>(.*?)</span></li>\s+?\
+<li>导演：<span>(.*?)</span></li>\s+?\
+<li>主演：<span>(.*?)</span></li>\s+?\
+<li>类型：<span>(.*?)</span></li>\s+?\
+<li class="sm">地区：<span>(.*?)</span></li>\s+?\
+<li class="sm">语言：<span>(.*?)</span></li>\s+?\
+<li class="sm">上映：<span>(.*?)</span></li>\s+?\
+<li class="sm">片长：<span>(.*?)</span></li>\s+?\
+<li class="sm">更新：<span>(.*?)</span></li>\s+?\
+<li class="sm">总播放量：<span><em id="hits">.*?</script></span></li>\s+?\
+<li class="sm">今日播放量：<span>(.*?)</span></li>\s+?\
+<li class="sm">总评分数：<span>(.*?)</span></li>\s+?\
+<li class="sm">评分次数：<span>(.*?)</span></li>',
 
                 show_list = 'checked="" />(.*?)</li>'
+
+
 
                 )
         
@@ -87,16 +106,16 @@ class Film135:
         
         language = self.split_info(info['info'][0][5])
         
-        m3u8_list = [url.split('$')  for url in info['show_list'] if url.endswith('.m3u8')][1:]
+        m3u8_list = [url.split('$')  for url in info['show_list'] if url.endswith('.m3u8')]
         
-        yun_list = [url.split('$')  for url in info['show_list'] if not url.endswith('.m3u8')][:-1]
+        yun_list = [url.split('$')  for url in info['show_list'] if not url.endswith('.m3u8')]
         
     
         film_info = dict(
                 
                 name = info['name'][0][0],
                 
-                start_time = info['name'][0][1],
+                name_info = info['name'][0][1],
                 
                 grade = info['name'][0][2],
                 
@@ -114,7 +133,17 @@ class Film135:
                 
                 show_time = info['info'][0][6],
                 
-                up_date = info['info'][0][7],
+                lens = info['info'][0][7],
+                
+                up_date = info['info'][0][8],
+                
+                #plays = info['info'][0][9],
+                
+                day_plays = info['info'][0][9],
+                
+                total_score =info['info'][0][10],
+                
+                total_score_number = info['info'][0][11],
                 
                 m3u8_list = m3u8_list,
                 
@@ -128,9 +157,9 @@ class Film135:
     
     def film_search(self, keyword, encoding = None):
         
-        post_url = 'http://www.156zy.co/index.php?m=vod-search'
+        post_url = 'http://www.kubozy.net/index.php?m=vod-search'
         
-
+        
         data = {
                 'wd': keyword,
                 'submit': 'search',
@@ -142,7 +171,7 @@ class Film135:
                 info = '<li><span class="tt"></span><span class="xing_vb4"><a href="(.*?)" target="_blank">(.*?)</a></span> <span class="xing_vb5">(.*?)</span> <span class="xing_vb6">(.*?)</span></li>'
                 )
         
-        info = Spider().post_info(post_url, data, **regex)['info']
+        info = Spider().post_info(post_url, data, encoding, **regex)['info']
         
         #print(info)
         
@@ -155,36 +184,67 @@ class Film135:
     
     def get_show_page_info(self,url):
         
-  
+        '''
+        url:'https://www.subo8988.com/?m=vod-type-id-13.html'
+        
+        
+        return:
+            
+            {
+            
+            #type_name:'香港剧'
+            film_list:[
+                    
+            
+            {
+                    url: 'https://www.subo8988.com/?m=vod-detail-id-25401.html'
+                    name: '宝宝来了[国语版] 20集全/已完结'
+                    types: '香港剧'
+                    update_time:'2019-05-27'
+                
+            
+            }
+            
+            ...
+            
+            
+            
+            ]
+            
+            
+            }
+        
+        '''
+        
         regex = dict(
-                
-                info = '<li><span class="tt"></span><span class="xing_vb4"><a href="(.*?)" target="_blank">(.*?)</a></span><span class="xing_vb5">(.*?)</span><span class="xing_vb[67]">(.*?)</span></li>'
-                
-                
+                info = '<ul>\s+?\
+    <li><span class="tt"></span><span class="xing_vb4"><a href="(.*?)" target="_blank">\s+?\
+	(.*?)</a></span> <span class="xing_vb5">(.*?)</span> <span class="xing_vb[67]">\s+?\
+	(.*?)</span></li>\s+?\
+   </ul> '
                 )
         
-        info = Spider().get_info(url,encoding = 'utf-8',**regex)['info']
-        
+        info = Spider().get_info(url,encoding = 'utf-8',  **regex)['info']
         
         info = [dict(url = i[0], name = i[1].split('&nbsp;')[0], types = i[2], update_time = i[3]) for i in info]
         
-        
-        
         return {'film_list': info}
-      
+        
+        
+        
     
-    def get_all_show_page_url(self,):
+    def get_all_show_page_url(self):
         
         '''
-        return:获取 http://www.135zy.co/ 网站所有 show_page_url
+        return:获取 https://www.subo8988.com/ 网站所有 show_page_url
         
         '''
         
-        url = 'http://www.135zy.vip/?m=vod-index-pg-{}.html'
+        url = 'http://www.kubozy.net/?m=vod-index-pg-{}.html'
         
+
         
-        
-        self.queue = [url.format(i) for i in range(1, 433)]
+        self.queue = [url.format(i) for i in range(1, 504)]
         
         
         return self.queue
@@ -193,35 +253,29 @@ class Film135:
     
     def get_all_show_page_url_yield(self):
 
-        url = 'http://www.135zy.vip/?m=vod-index-pg-{}.html'
+        url = 'http://www.kubozy.net/?m=vod-index-pg-{}.html'
 
-        for i in range(1, 433):
+        for i in range(1, 504):
 
             yield url.format(i)
+                
     
-#    def get_all_page(self,url):动态获取所有页数
-#        
-#        rst = Spider().get_html(url)
-#        
-#        ye = int(str(re.findall('<li><div class="pages" style="margin-bottom:10px;">共.*?条数据&nbsp;当前:1/(.*?)页&nbsp;<em>',rst,re.S))[2:-2])
-#        
-#        return ye
         
 if __name__ == '__main__':
     
-    url = 'http://www.135zy.vip/?m=vod-index-pg-1.html'
+    url = 'http://www.kubozy.net/?m=vod-index-pg-1.html'
     
-    x = Film135()
+    x = Film_kubo()
     
 #    yes = x.get_all_page(url)
     
-    #info = x.get_film_info('http://www.135zy.vip/?m=vod-detail-id-4845.html')
+    #info = x.get_film_info('http://www.kubozy.net/?m=vod-detail-id-25252.html')
     
-    #info = x.film_search('战士')
+    #info2 = x.film_search('下一站')
     
     
     #传入一个show_page_url返回所有电影信息
-    #info = x.get_show_page_info('http://www.135zy.vip/?m=vod-type-id-3-pg-2.html')
+    #info4 = x.get_show_page_info('http://www.kubozy.net/?m=vod-index-pg-4.html')
 
     #获取网站所有的show_page_url
     #info = x.get_all_show_page_url()
