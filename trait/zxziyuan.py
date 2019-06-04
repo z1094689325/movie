@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
 """
 Spyder Editor
-孔令浩  
+@author: 孔令浩 
 
 数据库 pymsql 
 This is a temporary script file.
 """
-from json import dump
 
 from spider import Spider
 
 
 
-class zxziyuan:
+class Zxziyuan:
     
     '''
     def get_film_info(self, url, encoding = None): 
@@ -184,20 +183,18 @@ class zxziyuan:
     
     def get_show_page_info(self,url):
                         
-        regex = dict( 
-                
-                info = '<li><span class="tt"></span><span class="xing_vb4"><a href="(.*?)" target="_blank">(.*?)</a></span> <span class="xing_vb5">(.*?)</span> <span class="xing_vb[67]">(.*?)</span></li>'
-
-                )
-
+#        url = 'http://www.zxziyuan.com/?m=vod-index-pg-1.html'
+        
+        regex = dict(
+                info = '<li><span class="tt"></span><span class="xing_vb4"><a href="(.*?)" target="_blank">\s+?\
+(.*?)</a></span> <span class="xing_vb5">(.*?)</span> <span class="xing_vb[67]">\s+?\
+(.*?)</span></li>')
+     
         info = Spider().get_info(url,encoding = 'utf-8',**regex)['info']
+
+        info = [dict(url = i[0], name = i[1].split('\t')[1], \
+                     types = i[2], update_time = i[3].split('\t')[1]) for i in info]
         
-        
-        info = [dict(url = i[0], name = i[1].split('\n')[1].split('\t')[1], \
-                     types = i[2], update_time = i[3].split('\n')[1].split('\t')[1]) for i in info]
-        
-        
-        print(info)
         return {'film_list': info}
         
         
@@ -233,13 +230,25 @@ if __name__ == '__main__':
     
     url = 'http://www.zxziyuan.com/?m=vod-detail-id-24818.html'
     
-    x = zxziyuan()
+    x = Zxziyuan()
     
+    url = 'http://www.zxziyuan.com/?m=vod-index-pg-6.html'
     
+    a=x.get_show_page_info(url)
     
+#    url=x.get_all_show_page_url()
+#    
+#    info = []
+#    
+#    for i in url[:10]:
+#        
+#        info.append(x.get_show_page_info(i))
+#        
+#        print(i)
+#    
 #    x.get_film_info(url)
-    
-    #info = x.film_search('潘金莲就是我')
+#    
+#    info = x.film_search('魔幻手机')
     
     
     
