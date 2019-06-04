@@ -4,6 +4,7 @@ Created on Thu May 30 19:47:28 2019
 
 @author: dell
 """
+__author__="任晋慧"
 from spider import Spider
 
 class Film135Zy:
