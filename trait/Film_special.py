@@ -9,6 +9,8 @@ Created on Wed May 29 16:42:01 2019
 #
 #import requests
 
+__author__ == '杨兴伟'
+
 from spider import Spider
 
 class Film_special:
