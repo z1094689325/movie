@@ -216,7 +216,7 @@ class Mcx3ttmj:
         
         regex = Spider().get_info(url,encoding = 'utf-8',  **regex)
         
-        info = [dict(url = i[0], name = i[1].split('&nbsp;')[0] ,area = i[2] , types = i[3] , update_time = i[4]) for i in regex['info']]
+        info = [dict(url = self.domain + i[0], name = i[1].split('&nbsp;')[0] ,area = i[2] , types = i[3] , update_time = i[4]) for i in regex['info']]
         
         return {'film_list':info}
 
