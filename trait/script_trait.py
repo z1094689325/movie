@@ -44,7 +44,7 @@ def trait_info():
 
     return info_dict
 
- 
+
     
 if __name__ == '__main__':
 
