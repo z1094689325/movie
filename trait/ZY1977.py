@@ -213,15 +213,13 @@ class Zy1977:
         
         regex = dict(
                 
-                info = '<li><span class="tt"></span><span class="xing_vb4"><a href="(.*?)" target="_blank">(.*?)<font color="#FF0000">(.*?)</font></a></span><span class="xing_vb51">(.*?)</span> <span class="xing_vb52">(.*?)</span> <span class="xing_vb54">(.*?)</span><span class="xing_vb53"><font color="#f60">(.*?)</font></span>  <span class="xing_vb[67]">(.*?)</span></li>'
-
-
-                
-                
+#                info = '<li><span class="tt"></span><span class="xing_vb4"><a href="(.*?)" target="_blank">(.*?)<font color="#FF0000">(.*?)</font></a></span><span class="xing_vb51">(.*?)</span> <span class="xing_vb52">(.*?)</span> <span class="xing_vb54">(.*?)</span><span class="xing_vb53"><font color="#f60">(.*?)</font></span>  <span class="xing_vb[67]">(.*?)</span></li>'
+                info ='\
+<li><span class="tt"></span><span class="xing_vb4"><a href="(.*?)" target="_blank">(.*?)<font color="#FF0000">(.*?)</font></a></span><span class="xing_vb51">(.*?)</span><span class="xing_vb52">(.*?)</span><span class="xing_vb54">(.*?)</span><span class="xing_vb53"><font color="#f60">(.*?)</font></span>.*?<span class="xing_vb[67]">(.*?)</span></li>'
                 )
         
         info = Spider().get_info(url,encoding = 'utf-8',  **regex)['info']
-        
+
         info = [dict(url = i[0], name = i[1].split('&nbsp;')[0], update_total = i[2], types = i[3], erae = i[4], show_time = i[5], pingfen=i[6], update_time = i[7]) for i in info]
         
         
@@ -259,8 +257,18 @@ class Zy1977:
         
 if __name__ == '__main__':
     
-    url = 'http://www.1977zy.com/?m=vod-index-pg-2.html'
+    url = 'http://www.1977zy.com/?m=vod-index-pg-1.html'
     
     x = Zy1977()
     
+#    a = x.get_all_show_page_url_yield()
+#    
+#    ls = []
+#    
+#    for i in range(10):
+#        
+#        u = next(a)
+        
+#        ls.append(x.get_show_page_info(u))
+#    info = x.get_show_page_info(url)
 #    info = x.film_search('龙珠')
