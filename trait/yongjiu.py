@@ -4,11 +4,11 @@ Created on Thu May 30 07:55:05 2019
 
 @author: 张荣辉
 """
-
+__author__ = '张荣辉'
 from spider import Spider
 
 
-class YongJiuSpider:
+class Yongjiu:
     '''
     def get_film_info(self, url, encoding = None): 
         传入一个电影详情链接，清洗该链接数据
