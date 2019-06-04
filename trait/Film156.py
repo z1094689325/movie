@@ -2,9 +2,8 @@
 """
 @author: 刘晶一
 """
+__author__ = '刘晶一'
 from spider import Spider
-
-import re
 
 class Film156:
     
@@ -176,7 +175,7 @@ class Film156:
         
         info = Spider().get_info(url,encoding = 'utf-8',**regex)['info']
         
-        info = [dict(url = i[0], name = i[1].split('&nbsp;')[0], types = i[2], update_time = i[3]) for i in info]
+        info = [dict(url = 'http://www.156zy.co'+i[0], name = i[1].split('&nbsp;')[0], types = i[2], update_time = i[3]) for i in info]
         
         
         
