@@ -163,7 +163,7 @@ class Ziyuan172:
         
         regex = dict(
                                                                                                                                                                                                                                                                                                                                 
-                info = '<li><span class="tt"></span><span class="xing_vb4"><img class="new" src="/template/172zy/images/Henry_new.gif"> <a href="(.*?)" target="_blank">(.*?)<font color="#FF0000">(.*?)</font>   <img class="new" src="/template/172zy/images/Henry_huo.gif"></span><span class="xing_vb51">(.*?)</span><span class="xing_vb54">(.*?)</span> <span class="xing_vb52">(.*?)</span> <span class="xing_vb53"><font color="#f60">(.*?)</font></span>  <span class="xing_vb7">(.*?)</span></a></li>'
+                info = '<li><span class="tt"></span><span class="xing_vb4"><img class="new" src="/template/172zy/images/Henry_new.gif"> <a href="(.*?)" target="_blank">(.*?)<font color="#FF0000">(.*?)</font>   <img class="new" src="/template/172zy/images/Henry_huo.gif"></span><span class="xing_vb51">(.*?)</span><span class="xing_vb54">(.*?)</span> <span class="xing_vb52">(.*?)</span> <span class="xing_vb53"><font color="#f60">(.*?)</font></span>  <span class="xing_vb[67]">(.*?)</span></a></li>'
                 )
         
         info = Spider().post_info(post_url, data, encoding, **regex)['info']
@@ -208,10 +208,11 @@ class Ziyuan172:
             }
         
         '''
-        
         regex = dict(
                 
-                info = '<li><span class="tt"></span><span class="xing_vb4"><img class="new" src="/template/172zy/images/Henry_new.gif"> <a href="(.*?)" target="_blank">(.*?)<font color="#FF0000">(.*?)</font>   <img class="new" src="/template/172zy/images/Henry_huo.gif"></span><span class="xing_vb51">(.*?)</span><span class="xing_vb54">(.*?)</span> <span class="xing_vb52">(.*?)</span> <span class="xing_vb53"><font color="#f60">(.*?)</font></span>  <span class="xing_vb[67]">(.*?)</span></a></li>'
+                info = '\
+<li><span class="tt"></span><span class="xing_vb4"> <a href="(.*?)" target="_blank">(.*?)<font color="#FF0000">(.*?)</font>\s+?\
+<img class="new" src="/template/172zy/images/Henry_huo.gif"></span><span class="xing_vb51">(.*?)</span><span class="xing_vb54">(.*?)</span>.*?<span class="xing_vb52">(.*?)</span>.*?<span class="xing_vb53"><font color="#f60">(.*?)</font></span>.*?<span class="xing_vb[67]">(.*?)</span></a></li>'
 
 
                 
@@ -220,11 +221,38 @@ class Ziyuan172:
         
         info = Spider().get_info(url,encoding = 'utf-8',  **regex)['info']
         
-        info = [dict(url = i[0], name = i[1].split('&nbsp;')[0], update_total = i[2], types = i[3], erae = i[4], show_time = i[5], pingfen=i[6], update_time = i[7]) for i in info]
+        ls = 'http://www.172zy.net'
+        
+        info = [dict(url = ls + i[0], name = i[1].split('&nbsp;')[0], update_total = i[2], types = i[3], erae = i[4], show_time = i[5], pingfen=i[6], update_time = i[7]) for i in info]
         
         
         
         return {'film_list': info}
+        
+#        regex=dict(
+#                href='\s+?\
+#<li><span class="tt"></span><span class="xing_vb4"> <a href="(.*?)" target="_blank">(.*?) <font color="#FF0000">(.*?)</font>.*?',
+#                img='<span class="xing_vb51">(.*?)</span><span class="xing_vb54">(.*?)</span> <span class="xing_vb52">(.*?)</span> <span class="xing_vb53"><font color="#f60">(.*?)</font></span>  <span class="xing_vb[67]">(.*?)</span></a></li>'
+#                )
+#        one_info=Spider().get_info(url,**regex)['href']
+#        one_info2=Spider().get_info(url,**regex)['img']
+#        joinurl='http://www.172zy.net'
+#        for i in one_info:
+#            url=joinurl+i[0],
+#            name=i[1],
+#            name_info=i[2]
+#            
+#            
+#        for i in one_info2:
+#            types=i[0],
+#            date=i[1],
+#            area=i[2],
+#            score=i[3],
+#            times=i[4]
+#        info=[dict(url=url,name=name,name_info=name_info,types=types,date=date,area=area,score=score,times=times)]
+#
+#        return {'film_list':info}
+
         
         
         
@@ -232,7 +260,7 @@ class Ziyuan172:
     def get_all_show_page_url(self):
         
         '''
-        return:获取 http://www.1977zy.com/ 网站所有 show_page_url
+        return:获取 http://www.172zy.net/ 网站所有 show_page_url
         
         '''
         
@@ -278,7 +306,7 @@ if __name__ == '__main__':
     
     #传入一个show_page_url返回所有电影信息
 
-#    info = x.get_show_page_info('http://www.172zy.net/?m=vod-index-pg-2.html')
+#    info = x.get_show_page_info('http://www.172zy.net/?m=vod-index-pg-9.html')
 
     #获取网站所有的show_page_url
 #    info = x.get_all_show_page_url(page)
