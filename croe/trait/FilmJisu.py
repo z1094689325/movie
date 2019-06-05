@@ -11,15 +11,13 @@ import requests#再导入第三方库
 
 from spider import Spider#最后导入自己的类
 
-class Film:
+class FilmJisu:
     
     domain = 'http://www.caijizy.com'
     
     def __init__(self):
         
-        self.page = self.get_page()
-        
-        self.show_page_list = self.get_all_show_page_url()
+       	pass
         
     '''特征函数'''
 
@@ -54,9 +52,7 @@ class Film:
 
 #这个函数用来爬取二级页面的信息
     def get_film_info(self, url, encoding = None):
-        
-        print("开始获取二级页面信息...")
-        
+            
         regex = dict(
             #这个爬取的是简介
             intro = '<!--简介开始-->(.*?)<!--简介结束-->',
@@ -129,14 +125,12 @@ class Film:
 
         )
         
-        print("获取成功!!!")
         
         return film_info
 
 
     def film_search(self, keyword, encoding = None):
-
-        print("开始获取搜索页面的信息...")      
+      
         
         post_url = 'http://www.caijizy.com/index.php?m=vod-search'
 
@@ -174,7 +168,6 @@ class Film:
     '''这个函数用来获取首页的信息'''
     def get_show_page_info(self, url):
         
-        print('开始获取一级页面信息...')
 
         joint_url = self.domain
         
@@ -195,13 +188,11 @@ class Film:
         
         info = [dict(url = joint_url+i[0], name = i[1]+i[2],types_url = joint_url + i[3], types = i[4],area = i[5], update_time = i[6])for i in info['info']]
         
-        print('成获取一级页面信息!!!')
         return {'film_list':info}
     
     
     def get_page(self):
         
-        print('开始获取页数...')
         
         page = None
         
@@ -220,15 +211,14 @@ class Film:
             
              page = int(info['re_page'][0])
              
-        print('成功获取页数...')
              
         return page
 
 
     '''这个函数用来获取网站上所有的一级网页的url'''
     def get_all_show_page_url_yield(self):
-        
-        print('开始获取url...')
+
+        sefl.page = self.get_page()
                     
         url = 'http://www.caijizy.com/?m=vod-index-pg-{}.html'
         
@@ -238,7 +228,8 @@ class Film:
             
             
     def get_all_show_page_url(self):
-        
+
+        sefl.page = self.get_page()
         
         url = 'http://www.caijizy.com/?m=vod-index-pg-{}.html'
         
@@ -255,6 +246,6 @@ if __name__=='__main__':
     x = Film()
 #    x.get_film_info(url)
 #x.get_show_page_info()
-    info = x.film_search('银魂')
+#    info = x.film_search('银魂')
 #    x.get_show_page_info(next(x.pageUrl))
 #    x.get_show_page_info(url)
