@@ -225,7 +225,7 @@ class Filmzuixinzy:
         
         info = Spider().get_info(url,encoding = 'utf-8',  **regex)['info']
         
-        info = [dict(url = i[0], name = i[1].split('&nbsp;')[0], types = i[2], update_time = i[3]) for i in info]
+        info = [dict(url = self.domain+i[0], name = i[1].split('&nbsp;')[0], types = i[2], update_time = i[3]) for i in info]
         
         
         
