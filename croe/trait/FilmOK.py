@@ -6,7 +6,9 @@ This is a temporary script file.
 """
 from spider import Spider
 #from requests import get
-#import re
+import re
+
+__author__='靳坤'
 
 class FilmOK:
     
@@ -57,7 +59,14 @@ class FilmOK:
             info_str = [info_str]
             
         return [i.strip() for i in info_str if i != '']
+    
+    def re_types(self, info_str_type):
         
+        pattern="[\u4e00-\u9fa5]+" 
+        
+        types=re.compile(pattern).findall(str(info_str_type))
+        
+        return types
         
     
     def get_film_info(self, url, encoding = None):
@@ -65,24 +74,25 @@ class FilmOK:
             
         
         regex = dict(
-                              
-                intro = '<div class="vodplayinfo">(.*?)</div> ',
                 
+                imgurl='<img class="lazy" src="(.*?)" alt=".*?" />',
+          
+                intro = '<span class="more" txt=".*?">(.*?)</span>',
+
                 name = '<h2>(.*?)</h2> \s+?<span>(.*?)</span> \s+?<label>(.*?)</label>',
                 
-                info = '\
-<li>别名：<span>(.*?)</span></li> \s+?\
-<li>导演：<span>(.*?)</span></li> \s+?\
-<li>主演：<span>(.*?)</span></li> \s+?\
-<li>类型：<span>(.*?) .*? (.*?)</a>&nbsp;.*? (.*?)</a>&nbsp;.*? (.*?)</a>&nbsp;.*? (.*?)</a>&nbsp;.*? (.*?)</a>&nbsp;.*? (.*?)</a>&nbsp;.*? (.*?)</a>&nbsp;.*? (.*?)</a>&nbsp;.*? (.*?)</a>&nbsp;.*? (.*?)</a>&nbsp;.*? (.*?)</a>&nbsp;.*? (.*?)</a>&nbsp;.*? (.*?)</a>&nbsp;.*? (.*?)</a>&nbsp;.*? (.*?)</a>&nbsp;.*? (.*?)</a>&nbsp;.*? (.*?)</a>&nbsp;.*? (.*?)</a></span></li> \s+?\
-<li class="sm">地区：<span>(.*?)</span></li> \s+?\
-<li class="sm">语言：<span>(.*?)</span></li> \s+?\
+                info = '<li>别名：<span>(.*?)</span></li>\s+?\
+<li>导演：<span>(.*?)</span></li>\s+?\
+<li>主演：<span>(.*?)</span></li>\s+?\
+<li>类型：<span>(.*?)</span></li> \s+\
+<li class="sm">地区：<span>(.*?)</span></li>\s+?\
+<li class="sm">语言：<span>(.*?)</span></li>\s+?\
 <li class="sm">上映：<span>(.*?)</span></li>\s+?\
 <li class="sm">片长：<span>(.*?)</span></li>\s+?\
-<li class="sm">更新：<span>(.*?)</span></li> \s+?\
-<li class="sm">总播放量：<span>.*?</span></li> \s+?\
-<li class="sm">今日播放量：<span>0</span></li> \s+?\
-<li class="sm">总评分数：<span>(.*?)</span></li> \s+?\
+<li class="sm">更新：<span>(.*?)</span></li>\s+?\
+<li class="sm">总播放量：<span>(.*?)</span></li>\s+?\
+<li class="sm">今日播放量：<span>(.*?)</span></li>\s+?\
+<li class="sm">总评分数：<span>(.*?)</span></li>\s+?\
 <li class="sm">评分次数：<span>(.*?)</span></li>',
 
                 show_list = 'checked="" />(.*?)</li> '
@@ -93,11 +103,13 @@ class FilmOK:
         
         info = Spider().get_info(url, encoding = encoding, **regex)
         
+        athour_name = self.split_info(info['info'][0][0])
+    
         director = self.split_info(info['info'][0][1])
             
         actor = self.split_info(info['info'][0][2])
         
-        types = self.split_info(info['info'][0][3])
+        types = self.re_types(info['info'][0][3])
         
         area = self.split_info(info['info'][0][4])
         
@@ -105,10 +117,13 @@ class FilmOK:
         
         m3u8_list = [url.split('$')  for url in info['show_list'] if url.endswith('.m3u8')]
         
-        yun_list = [url.split('$')  for url in info['show_list'] if not url.endswith('.m3u8')]
+        yun_list = [url.split('$')  for url in info['show_list'] if not url.endswith('.m3u8') and not url.endswith('.mp4')]
         
+        mp4_list = [url.split('$') for url in info['show_list'] if url.endswith('.mp4')]
     
         film_info = dict(
+                
+                imgurl=info['imgurl'][0],
                 
                 name = info['name'][0][0],
                 
@@ -116,7 +131,7 @@ class FilmOK:
                 
                 grade = info['name'][0][2],
                 
-                athour_name = info['info'][0][0],
+                athour_name = athour_name,
                 
                 director = director,
                 
@@ -134,8 +149,6 @@ class FilmOK:
                 
                 up_date = info['info'][0][8],
                 
-                #plays = info['info'][0][9],
-                
                 day_plays = info['info'][0][9],
                 
                 total_score =info['info'][0][10],
@@ -145,6 +158,8 @@ class FilmOK:
                 m3u8_list = m3u8_list,
                 
                 yun_list = yun_list,
+                
+                mp4_list = mp4_list
                 
                 )
         
@@ -211,14 +226,7 @@ class FilmOK:
         
         '''
         
-#        res=get(url)
-#        res.encoding='utf-8'
-#        data=res.text
-#        
-#        
-#        regexs = re.findall('<li><span class="tt"></span><span class="xing_vb4"><a href="(.*?)" target="_blank">(.*?)</a></span> <span class="xing_vb5">(.*?)</span> <span class=".*?">(.*?)</span></li>',data,re.S)
-#        
-#        info = (url,encoding = 'utf-8', regexs)#['info']
+
         
         regex = dict(
                 
@@ -269,11 +277,8 @@ if __name__ == '__main__':
     
     x = FilmOK()
     
-    #info = x.film_search('夏目友人帐')
-    
-    
-    
-        
-        
+    #info = x.film_search('亮剑')
+#    
+#    i= x.get_film_info('http://www.jisudhw.com/?m=vod-detail-id-32406.html')
 
 
