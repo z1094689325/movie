@@ -71,6 +71,8 @@ class Filmzuixinzy:
                 
                 name = '<h2>(.*?)</h2>\s+?<span>(.*?)</span>\s+?<label>(.*?)</label>',
                 
+                imgurl = '<img class="lazy" src="(.*?)" alt=".*?" />',
+                
                 info = '\
 <li>别名：<span>(.*?)</span></li>\s+?\
 <li>导演：<span>(.*?)</span></li>\s+?\
@@ -110,6 +112,8 @@ class Filmzuixinzy:
         
     
         film_info = dict(
+                
+                imgurl = info['imgurl'],
                 
                 name = info['name'][0][0],
                 
@@ -221,7 +225,7 @@ class Filmzuixinzy:
         
         info = Spider().get_info(url,encoding = 'utf-8',  **regex)['info']
         
-        info = [dict(url = i[0], name = i[1].split('&nbsp;')[0], types = i[2], update_time = i[3]) for i in info]
+        info = [dict(url = self.domain+i[0], name = i[1].split('&nbsp;')[0], types = i[2], update_time = i[3]) for i in info]
         
         
         
