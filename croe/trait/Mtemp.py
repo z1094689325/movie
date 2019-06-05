@@ -93,6 +93,11 @@ class Mtemp:
                 )
         info=Spider().get_info(url,encoding='utf-8',**regex)['info']
         
+        joint_url = self.domain
+        
+        info = [dict(url = joint_url+i[0], name = i[1].split('&nbsp;')[0], types = i[2], update_time = i[3]) for i in info]
+        
+        
         return {'film_list': info}
     
     def get_all_show_page_url(self):
@@ -115,13 +120,13 @@ class Mtemp:
             yield url.format(i)
     
 if __name__=='__main__':
-    url='http://www.okzyw.com/?m=vod-detail-id-33003.html'
+    #url='http://www.okzyw.com/?m=vod-detail-id-33003.html'
     #url='http://www.123ku.com/?m=vod-index-pg-1.html'
     x=Mtemp()
     #info=x.get_all_show_page_url()
-    info=x.get_film_info(url)
-    #info=x.film_search('复仇者联盟')
-    #info=x.get_show_page_info('http://www.123ku.com/?m=vod-index-pg-1.html')
+    #info=x.get_film_info(url)
+    #info=x.film_search('')
+    info=x.get_show_page_info('http://www.123ku.com/?m=vod-index-pg-1.html')
     
 
     
