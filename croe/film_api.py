@@ -9,6 +9,7 @@ import redis
 import queue
 import threading
 import json
+import sys
 
 from script_trait import TraitAPI
 
@@ -94,11 +95,16 @@ class FilmApi:
         
         self.producer()                 #往任务队列添加任务
         
-        self.q.join()                   #阻塞主线程直到所有的队列任务完成
         
+        self.q.join()                   #阻塞主线程直到所有的队列任务完成
+        print('卡q’')
         for i in range(len(trait_info)):#退出线程机制
+
+            print('******************')
             
             self.q.put(None)
+            
+        print('ka qq')
             
             
         for t in threads:
@@ -145,9 +151,14 @@ class FilmApi:
                     
                         film_info = trait_class().get_film_info(url)#获取url对应的信息
                         
+                        
+                        
                     except:
                         
-                        print(trait_class().__author__, '报错')
+                        
+                        
+                        
+                        print(trait_class, '报错',str(sys.exc_info()))
                         
                     else:
                     
@@ -184,8 +195,21 @@ class FilmApi:
         
 if __name__ == '__main__':
     
+    
     x= FilmApi()
-    #info = x.search_detail('亮剑')
+    
+    r = x.r
+    
+    def clear_redis():
+        
+        for i in r.keys():
+            
+            r.delete(i)
+            
+            
+    info = x.search_detail('亮剑')
+    #
+    
 
     
     
