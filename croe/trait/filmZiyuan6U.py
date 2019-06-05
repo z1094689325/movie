@@ -68,7 +68,8 @@ class FilmZiyuan6U:
 <li class="sm">今日播放量：<span>(.*?)</span></li>\s+?\
 <li class="sm">总评分数：<span>(.*?)</span></li>\s+?\
 <li class="sm">评分次数：<span>(.*?)</span></li>',
-                show_list = 'target=_blank>(.*?)</a>&emsp;'
+                show_list = 'target=_blank>(.*?)</a>&emsp;',
+                imgurl = '<img class="lazy" src="(.*?)" alt=".*?" />'
                 )
         info = Spider().get_info(url,encoding = encoding,**regex)
         director = self.split_info(info['info'][0][1])
@@ -81,21 +82,22 @@ class FilmZiyuan6U:
                 name = info['name'][0][0],
                 name_info = info['name'][0][1],
                 grader = info['name'][0][2],
-                another_name = info['info'][0][0],
+                athour_name = info['info'][0][0],
                 director = director,
                 actor = actor,
                 types = types,
                 area = area,
                 language = language,
                 show_time = info['info'][0][6],
-                lenth = info['info'][0][7],
-                update_time = info['info'][0][8],
+                lens = info['info'][0][7],
+                up_date = info['info'][0][8],
                 day_palys = info['info'][0][9],
                 total_score = info['info'][0][10],
                 total_score_number = info['info'][0][11],
                 intro = info['intro'][0],
                 m3u8_list = [i.split('$') for i in info['show_list'] if i.endswith('index.m3u8')],
-                yun_list = [i.split('$') for i in info['show_list'] if not i.endswith('index.m3u8')]
+                yun_list = [i.split('$') for i in info['show_list'] if not i.endswith('index.m3u8')],
+                imgurl = info['imgurl'][0]
                 )
         return film_info
         

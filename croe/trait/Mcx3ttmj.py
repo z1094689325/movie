@@ -86,13 +86,17 @@ class Mcx3ttmj:
 
                 show_list = '<li><label><input type="checkbox" class="uk-display-inline" name="choice" checked><b>(.*?)</b><a href="(.*?)" target="_blank" class="uk-display-inline uk-margin-left">(.*?)</a></label></li>',
                 
-
+                imgurl = '\
+<div class="cover">\s+?\
+<img src="(.*?)" alt=".*?"width=".*?">\s+?\
+</div>'
+                
                 )
         info = Spider().get_info(url,encoding = encoding , **regex)
         
         info1 = [re.findall('<a href="(.*?)" target="_blank">(.*)',i) for i in info['info'][0][4].split('</a>') if i != '']
         
-#        return info1
+#        return info
         #类型
         types = self.split_info(info['info'][0][0])
 #        导演链接
@@ -117,9 +121,13 @@ class Mcx3ttmj:
         update_time = self.split_info(info['info'][0][-2])
 #        豆瓣评分
         score = self.split_info(info['info'][0][-1])
-        
 #        电影链接
         m3u8_list = [url[2] for url in info['show_list'][0:30]]
+#        电影图片
+        imgurl = info['imgurl']
+#        电影简介
+        intro = info['intro']
+        
 #        
 #        yun_list = [url.split('$')  for url in info['show_list'] if not url.endswith('.m3u8')]
 #        
@@ -136,11 +144,11 @@ class Mcx3ttmj:
                 
                 performer_url = performer_url,
                 
-                performer = performer,
+                actor = performer,
                 
                 language = language,
                 
-                region = region,
+                area = region,
                 
                 drama_series = drama_series,
                 
@@ -148,12 +156,29 @@ class Mcx3ttmj:
                 
                 #plays = info['info'][0][9],
                 
-                update_time = update_time,
+                up_date = update_time,
                 
-                score =score,
+                grade =score,
                 
-                m3u8_list = m3u8_list
+                m3u8_list = m3u8_list,
                 
+                imgurl = imgurl,
+                
+                intro = intro,
+                
+                athour_name = '',
+                
+                day_plays = '',
+                
+                lens = '',
+                
+                name_info = '',
+                
+                total_score = '',
+                
+                total_score_number = '',
+                
+                yun_list = ''
                 )
         
         
@@ -254,7 +279,7 @@ if __name__ == '__main__':
     
 #    url = 'http://3ttmj.com/?s=Home-Index-index-p-1.html'
     
-    url = 'http://3ttmj.com/?s=Home-vod-read-id-19868.html'
+    url = 'http://3ttmj.com/?s=Home-vod-read-id-17852.html'
     
     x = Mcx3ttmj()
     

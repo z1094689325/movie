@@ -6,7 +6,7 @@ Created on Fri May 31 09:28:58 2019
 """
 import unittest
 
-from trait.FilmSubo8988 import FilmSubo8988
+from croe.trait.Filmzuixinzy import Filmzuixinzy
 
 import types
 
@@ -15,11 +15,11 @@ class TestFilmTrait(unittest.TestCase):
         
      #测试所需要的参数
             
-    trait_obj = FilmSubo8988()#要测试的类实例请自行修改
+    trait_obj = Filmzuixinzy()#要测试的类实例请自行修改
 
-    test_film_info_arg = 'https://www.subo8988.com/?m=vod-detail-id-25900.html'#详情页网站
+    test_film_info_arg = 'http://www.zuixinzy.com/?m=vod-detail-id-28087.html'#详情页网站
     
-    test_get_show_page_info_arg = 'https://www.subo8988.com/index.php?m=vod-search' #首页搜索url
+    test_get_show_page_info_arg = 'http://www.zuixinzy.com/index.php?m=vod-search' #首页搜索url
     
     show_page_list = trait_obj.get_all_show_page_url()[:20]
     

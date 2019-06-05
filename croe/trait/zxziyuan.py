@@ -10,6 +10,7 @@ This is a temporary script file.
 from spider import Spider
 
 
+__author__ = '孔令浩'
 
 class Zxziyuan:
     
@@ -86,15 +87,16 @@ class Zxziyuan:
 <li class="sm">总播放量：<span><em id="hits">.*?</script></span></li>\s+?\
 <li class="sm">今日播放量：<span>(.*?)</span></li>\s+?\
 <li class="sm">总评分数：<span>(.*?)</span></li>\s+?\
-<li class="sm">评分次数：<span>(.*?)</span></li>',
+<li class="sm">评分次数：<span>(.*?)</span></li>\s+?\
+',
 
-                show_list = 'checked="" />(.*?)</li>'
+                show_list = 'checked="" />(.*?)</li>' ,
 
-
+                imgurl = '<img class="lazy" src="(.*?)" alt=".*?" />'
 
                 )
         
-        info = Spider().get_info(url, encoding = encoding, **regex)
+        info = Spider().get_info(url,  **regex)
         
         director = self.split_info(info['info'][0][1])
             
@@ -148,6 +150,8 @@ class Zxziyuan:
                 m3u8_list = m3u8_list,
                 
                 yun_list = yun_list,
+                
+                imgurl = info['imgurl'][0]
                 
                 )
 #        film_info = dump(film_info)
@@ -232,10 +236,10 @@ if __name__ == '__main__':
     
     x = Zxziyuan()
     
-    url = 'http://www.zxziyuan.com/?m=vod-index-pg-6.html'
-    
-    a=x.get_show_page_info(url)
-    
+#    url = 'http://www.zxziyuan.com/?m=vod-index-pg-6.html'
+#    
+#    a=x.get_show_page_info(url)
+#    info = x.get_film_info(url)
 #    url=x.get_all_show_page_url()
 #    
 #    info = []

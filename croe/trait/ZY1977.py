@@ -91,9 +91,9 @@ class Zy1977:
                 show_time ='<li>上映：<span>(.*?)</span></li>',
                 up_date ='<li>更新：<span>(.*?)</span></li>',
 
-                show_list = 'checked="" />(.*?)</li>'
+                show_list = 'checked="" />(.*?)</li>',
 
-
+                imgurl = '<img class="lazy" src="(.*?)"'
 
 
                 )
@@ -138,6 +138,8 @@ class Zy1977:
                 area = area,
                 
                 language = language,
+                
+                imgurl=info['imgurl'][0] ,
                 
                 show_time = info['show_time'][0],
                 

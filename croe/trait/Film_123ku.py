@@ -42,7 +42,8 @@ class Film123ku:
 <li class="sm">评分次数：<span>(.*?)</span></li>\s+?\
 <li class="sm">影片评分：<span><script>.*?</script></span></li>''',
 
-                show_list = 'target="_black">(.*?)</a>'
+                show_list = 'target="_black">(.*?)</a>',
+                imgurl='<img class="lazy" src="(.*?)" alt=".*?" />'
                 )
         info=Spider().get_info(url,**regex)
         
@@ -65,10 +66,11 @@ class Film123ku:
         
         x=info['jieshao'][0]
         film_info=dict(
+                imgurl=info['imgurl'][0],
                 name = info['name'][0][0],
                 name_info = info['name'][0][1],
                 grade = info['name'][0][2],
-                anthor=info['anthor'][0],
+                athour_name=info['anthor'][0],
                 director=director,
                 act=act,
                 types=x[0],
