@@ -17,9 +17,9 @@ class TestFilmTrait(unittest.TestCase):
             
     trait_obj = FilmSubo8988()#要测试的类实例请自行修改
 
-    test_film_info_arg = ''#详情页网站
+    test_film_info_arg = 'https://www.subo8988.com/?m=vod-detail-id-25900.html'#详情页网站
     
-    test_get_show_page_info_arg = '' #首页url
+    test_get_show_page_info_arg = 'https://www.subo8988.com/index.php?m=vod-search' #首页搜索url
     
     show_page_list = trait_obj.get_all_show_page_url()[:20]
     
@@ -98,25 +98,68 @@ class TestFilmTrait(unittest.TestCase):
         
         self.assertTrue(bool(film_info))
         
-        self.assertTrue(isinstance([i for i in film_info.values()],list))
+        self.assertTrue(bool('imgurl' in film_info))#图片网址
+        
+        self.assertTrue(bool('actor' in film_info))#主演
+        
+        self.assertTrue(bool('area' in film_info))#地区
+        
+        self.assertTrue(bool('athour_name' in film_info))#别名
+        
+        self.assertTrue(bool('day_plays' in film_info))#日播放量
+        
+        self.assertTrue(bool('director' in film_info))#导演
+        
+        self.assertTrue(bool('grade' in film_info))#评分
+        
+        self.assertTrue(bool('language' in film_info))#语言
+        
+        self.assertTrue(bool('lens' in film_info))#片长
+        
+        self.assertTrue(bool('m3u8_list' in film_info))#m3u8网址
+        
+        self.assertTrue(bool('name' in film_info))#片名
+        
+        self.assertTrue(bool('name_info' in film_info))#更新到哪集
+        
+        self.assertTrue(bool('show_time' in film_info))#上映时间
+        
+        self.assertTrue(bool('total_score' in film_info))#总评分数
+        
+        self.assertTrue(bool('total_score_number' in film_info))#评分次数
+        
+        self.assertTrue(bool('types' in film_info))#类型
+        
+        self.assertTrue(bool('up_date' in film_info))#更新时间
+        
+        self.assertTrue(bool('yun_list' in film_info))#其他类型下载网址
+        
         
     def test_get_show_page_info(self):
         
         show_page=self.trait_obj.get_show_page_info(self.test_get_show_page_info_arg)
         
+        film_list = show_page['film_list']
+        
         self.assertTrue(isinstance(show_page,dict))
         
         self.assertTrue(bool(show_page))
         
-        self.assertTrue(bool(show_page['film_list']))
+        self.assertTrue('film_list' in show_page)
         
-        if show_page:
+        self.assertTrue(isinstance(film_list,list))
+        
+        if film_list:
             
-            self.assertTrue(bool(show_page['film_list'][0]['url']))
+            self.assertTrue(bool(film_list[0]['url']))
+            #print('aa:', film_list[0]['url'])
+            self.assertTrue(self.host in film_list[0]['url'])
             
-            self.assertTrue(bool(show_page['film_list'][0]['name']))
+            self.assertTrue(bool(film_list[0]['name']))
             
-            self.assertTrue(bool(show_page['film_list'][0]['update_time']))
+            self.assertTrue(bool(film_list[0]['types']))
+            
+            self.assertTrue(bool(film_list[0]['update_time']))
         
     def test_isupper(self):
         self.assertTrue('FOO'.isupper())
