@@ -71,9 +71,10 @@ class FilmJisu:
         <li><div class="left">连载状态: <!--连载开始-->(.*?)<!--连载结束--></div><div class="right">上映年份: <!--年代开始-->(.*?)<!--年代结束--></div></li>\s+?\
         <li><div class="left">更新时间: <!--时间开始-->(.*?)<!--时间结束--></div><div class="right">豆瓣ID: <!--豆瓣ID开始-->(.*?)<!--豆瓣ID结束--></div></li>',
 
-            show_list = '<input type="checkbox" name="copy_sel" value="(.*?)" checked="">'
+            show_list = '<input type="checkbox" name="copy_sel" value="(.*?)" checked="">',
+            img_src='<!--图片开始--><img src="(.*?)"/>'
         )
-
+            
         info = Spider().get_info(url, encoding = encoding, **regex)
 
         director = self.split_info(info['info'][0][4])
@@ -118,10 +119,14 @@ class FilmJisu:
             up_data = info['info'][0][11],#更新时间
 
             grade = info['info'][0][12],#影片评分
+            
+            brief_info = info['intro'][0],#简介
 
             m3u8_list = m3u8_list,
 
-            yun_list = yun_list
+            yun_list = yun_list,
+
+            imgsrc = info['img_src'][0]#图片链接
 
         )
         
@@ -218,7 +223,7 @@ class FilmJisu:
     '''这个函数用来获取网站上所有的一级网页的url'''
     def get_all_show_page_url_yield(self):
 
-        sefl.page = self.get_page()
+        self.page = self.get_page()
                     
         url = 'http://www.caijizy.com/?m=vod-index-pg-{}.html'
         
@@ -229,7 +234,7 @@ class FilmJisu:
             
     def get_all_show_page_url(self):
 
-        sefl.page = self.get_page()
+        self.page = self.get_page()
         
         url = 'http://www.caijizy.com/?m=vod-index-pg-{}.html'
         
@@ -240,11 +245,11 @@ class FilmJisu:
         
     
 if __name__=='__main__':
-#    url = 'http://www.caijizy.com/?m=vod-detail-id-42148.html'
-    url = 'http://www.caijizy.com/?m=vod-index-pg-1.html'
+    url = 'http://www.caijizy.com/?m=vod-detail-id-42148.html'
+#    url = 'http://www.caijizy.com/?m=vod-index-pg-1.html'
     
-    x = Film()
-#    x.get_film_info(url)
+    x = FilmJisu()
+#    info = x.get_film_info(url)
 #x.get_show_page_info()
 #    info = x.film_search('银魂')
 #    x.get_show_page_info(next(x.pageUrl))
