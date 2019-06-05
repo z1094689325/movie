@@ -4,10 +4,11 @@ Created on Mon Jun  3 16:46:04 2019
 
 @author: 史红飞
 """
+__author__ = '史红飞'
 from spider import Spider
 import re
 
-class Ziyuan172:
+class Ziyuanwang172:
     
     '''
     def get_film_info(self, url, encoding = None): 
@@ -62,12 +63,14 @@ class Ziyuan172:
     def get_film_info(self, url, encoding = None):
         
             
-#        url='http://www.1977zy.com/?m=vod-detail-id-60533.html'
+        url='http://www.172zy.net/?m=vod-detail-id-58510.html'
         regex = dict(
                              
                 intro = '<div class="vodplayinfo">(.*?)</div>',
                 
                 name = '<h2>(.*?)</h2>\s+?<span>(.*?)</span>\s+?<label>(.*?)</label>',
+                
+                
                 
 #                info = '\
 #<li>别名：<span>(.*?)</span></li>\s+?\
@@ -89,15 +92,16 @@ class Ziyuan172:
                 show_time ='<li>上映：<span>(.*?)</span></li>',
                 up_date ='<li>更新：<span>(.*?)</span></li>',
 
-                show_list = 'checked="" />(.*?)</li>'
-
-
+                show_list = 'checked="" />(.*?)</li>',
+                
+                
+                imgurl = '<img class="lazy" src="(.*?)" alt=".*?" />'
 
 
                 )
         
         info = Spider().get_info(url, encoding = encoding, **regex)
-        
+  
         director = self.split_info(info['director'][0]) #导演
             
         actor = self.split_info(info['actor'][0]) #主演
@@ -110,9 +114,9 @@ class Ziyuan172:
         
         language = self.split_info(info['language'][0]) #语言
         
-        list_97m3u8 = [url.split('$')  for url in info['show_list'] if url.endswith('.m3u8')]
+        m3u8_list = [url.split('$')  for url in info['show_list'] if url.endswith('.m3u8')]
         
-        list_1977zy = [url.split('$')  for url in info['show_list'] if not url.endswith('.m3u8')]
+        yun_list = [url.split('$')  for url in info['show_list'] if not url.endswith('.m3u8')]
         
     
         film_info = dict(
@@ -122,7 +126,7 @@ class Ziyuan172:
                 name_info = info['name'][0][1],
                 
                 grade = info['name'][0][2],
-                
+                 
                 athour_name = info['athour_name'][0],
                 
                 director = director,
@@ -137,13 +141,25 @@ class Ziyuan172:
                 
                 language = language,
                 
+                imgurl = info['imgurl'][0],
+                
                 show_time = info['show_time'][0],
                 
                 up_date = info['up_date'][0],
                 
-                list_97m3u8 = list_97m3u8,
+                m3u8_list = m3u8_list,
                 
-                list_1977zy = list_1977zy,
+                yun_list = yun_list,
+                
+                day_plays = '',
+                
+                total_score_number = '',
+                
+                lens = '',
+                
+                total_score = '',
+                
+                
                 
                 )
         
@@ -223,7 +239,7 @@ class Ziyuan172:
         
         ls = 'http://www.172zy.net'
         
-        info = [dict(url = ls + i[0], name = i[1].split('&nbsp;')[0], update_total = i[2], types = i[3], erae = i[4], show_time = i[5], pingfen=i[6], update_time = i[7]) for i in info]
+        info = [dict(url = ls + i[0], name = i[1].split('&nbsp;')[0], update_total = i[2], types = i[3], show_time = i[4], area = i[5], pingfen=i[6], update_time = i[7]) for i in info]
         
         
         
@@ -295,11 +311,11 @@ if __name__ == '__main__':
     
     url = 'http://www.172zy.net/?m=vod-index-pg-1.html'
     
-    x = Ziyuan172()
+    x = Ziyuanwang172()
     
 #    page = x.get_all_page(url)
     
-#    info = x.get_film_info('http://www.172zy.net/?m=vod-detail-id-60113.html')
+#    info = x.get_film_info('http://www.172zy.net/?m=vod-detail-id-58510.html')
     
 #    info = x.film_search('西游记')
     
