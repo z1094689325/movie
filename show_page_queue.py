@@ -81,9 +81,9 @@ class ShowPageQueue:
             
             else:   
             
-                show_page_url = trait_class().get_all_show_page_url()
+                show_page_url = trait_class().get_all_show_page_url()#获取该网页的所有url队列
                 
-                redis_conn.rpush('show_page_url', *show_page_url)
+                redis_conn.rpush('show_page_url', *show_page_url)#添加一个或多个url到列表中
                 
                 print(trait_class.domain, '加队队列')
             
