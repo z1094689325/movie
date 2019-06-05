@@ -25,20 +25,20 @@ class Mtemp:
         
         regex=dict(
                 imgurl='<img class="lazy" src="(.*?)" alt=".*?" />',
-                name='<h2>(.*?)</h2>\s+?<span>(.*?)</span>\s+?<label>(.*?)</label>',
-                info='<li>别名：<span>(.*?)</span></li>\s+?\
-         <li>导演：<span>(.*?)</span></li>\s+?\
-         <li>主演：<span>(.*?)</span></li>\s+?\
-         <li>类型：<span>(.*?) </span></li>\s+?\
-         <li class="sm">地区：<span>(.*?)</span></li>\s+?\
-         <li class="sm">语言：<span>(.*?)</span></li>\s+?\
-         <li class="sm">上映：<span>(.*?)</span></li>\s+?\
-		 <li class="sm">片长：<span>(.*?)</span></li>\s+?\
-         <li class="sm">更新：<span>(.*?)</span></li>\s+?\
-         <li class="sm">总播放量：<span>(.*?)</span></li>\s+?\
-         <li class="sm">今日播放量：<span>(.*?)</span></li>\s+?\
-         <li class="sm">总评分数：<span>(.*?)</span></li>\s+?\
-         <li class="sm">评分次数：<span>(.*?)</span></li>',
+                name='<h2>(.*?)</h2> \s+?<span>(.*?)</span> \s+?<label>(.*?)</label>',
+                info= '<li>别名：<span>(.*?)</span></li>\s+?\
+<li>导演：<span>(.*?)</span></li>\s+?\
+<li>主演：<span>(.*?)</span></li>\s+?\
+<li>类型：<span>(.*?)</span></li> \s+\
+<li class="sm">地区：<span>(.*?)</span></li>\s+?\
+<li class="sm">语言：<span>(.*?)</span></li>\s+?\
+<li class="sm">上映：<span>(.*?)</span></li>\s+?\
+<li class="sm">片长：<span>(.*?)</span></li>\s+?\
+<li class="sm">更新：<span>(.*?)</span></li>\s+?\
+<li class="sm">总播放量：<span>(.*?)</span></li>\s+?\
+<li class="sm">今日播放量：<span>(.*?)</span></li>\s+?\
+<li class="sm">总评分数：<span>(.*?)</span></li>\s+?\
+<li class="sm">评分次数：<span>(.*?)</span></li>',
                 show_list='<input type="checkbox" name="copy_sel" value=".*?" checked="" />(.*?)</li> '
                 )
 
@@ -120,13 +120,13 @@ class Mtemp:
             yield url.format(i)
     
 if __name__=='__main__':
-    #url='http://www.okzyw.com/?m=vod-detail-id-33003.html'
+    url='http://www.okzyw.com/?m=vod-detail-id-26773.html'
     #url='http://www.123ku.com/?m=vod-index-pg-1.html'
     x=Mtemp()
     #info=x.get_all_show_page_url()
-    #info=x.get_film_info(url)
+    info=x.get_film_info(url)
     #info=x.film_search('')
-    info=x.get_show_page_info('http://www.123ku.com/?m=vod-index-pg-1.html')
+    #info=x.get_show_page_info('http://www.123ku.com/?m=vod-index-pg-1.html')
     
 
     
