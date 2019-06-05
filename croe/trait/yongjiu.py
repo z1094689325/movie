@@ -48,8 +48,8 @@ class Yongjiu:
 <li><div class="left">语言分类: <!--语言开始-->(.*?)<!--语言结束--></div><div class="right">影片地区: <!--地区开始-->(.*?)<!--地区结束--></div></li>\s+?\
 <li><div class="left">连载状态: <!--连载开始-->(.*?)<!--连载结束--></div><div class="right">上映年份: <!--年代开始-->(.*?)<!--年代结束--></div></li>\s+?\
 <li><div class="left">更新时间: <!--时间开始-->(.*?)<!--时间结束--></div><div class="right">豆瓣ID: <!--豆瓣ID开始-->(.*?)<!--豆瓣ID结束--></div></li>\s+?',
-            show_list='<input type="checkbox" name="copy_sel" value="(.*?)" checked="">'        
-
+            show_list='<input type="checkbox" name="copy_sel" value="(.*?)" checked="">',        
+			imgurl='<div class="videoPic"><!--图片开始--><img src="(.*?)"/><!--图片结束--></div>'
         )
         
         info = Spider().get_info(url, encoding = encoding, **regex)
@@ -65,7 +65,7 @@ class Yongjiu:
         yun_list = [url.split('$')[1]  for url in info['show_list'] if not url.endswith('.m3u8')]
         
         film_info = dict(
-                
+                imgurl=info['imgurl'][0],
                 name = info['info'][0][0],#影片名称
                 name_info = '',
                 grader = '',
