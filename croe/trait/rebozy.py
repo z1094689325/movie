@@ -8,9 +8,7 @@ Created on Mon May 27 14:18:44 2019
 
 @author: 杨坤
 """
-__author__ = '$杨坤'
 from spider import Spider
-
 
 
 class Rebozy:
@@ -65,9 +63,13 @@ class Rebozy:
         
     
     def get_film_info(self, url, encoding = None):
+
         
         regex = dict(
-                              
+                 
+                #图片网址
+                img_url = '<p class="margin-0 text-center hidden-xs"><a class="copy_btn text-muted" href="javascript:;" data-text="(.*?)">复制图片地址</a></p>',
+                
                 intro = '<meta name="description" content="(.*?)" />',
                 
                 name = '<h1 class="title"><!-- 名称 -->(.*?)<!-- end 名称 -->',
@@ -101,21 +103,33 @@ info = '\
 <span class="text-muted">点击：</span><!-- 点击 -->(.*?)<!-- end 点击 -->\s+?\
 </p>',
 
+
                 show_list = '<input type="checkbox" name=".*?" value="(.*?)" checked>'
                 
                 )
-        info = Spider().get_info(url,encoding = encoding, **regex)
-      
+        info = Spider().get_info(url,encoding = 'utf8', **regex)
+        
+#      
 #        return info
         
+       
+         #图片url
+        imgurl = info['img_url'][0]
+        
+        #片名
+        name = info['name'][0]
+        
+        #详情
+        intro = info['intro'][0]
+        
         #评分
-        score = self.split_info(info['info'][0][0])
+        grade = self.split_info(info['info'][0][0])
         #别名
-        alias = self.split_info(info['info'][0][1])
+        athour_name = self.split_info(info['info'][0][1])
 #        #状态
 #        state = self.split_info(info['info'][0][2])
         #时间
-        date = self.split_info(info['info'][0][3])
+        up_date = self.split_info(info['info'][0][3])
         #主演
         actor = self.split_info(info['info'][0][4])
         #导演
@@ -127,15 +141,15 @@ info = '\
         #地区
         area = self.split_info(info['info'][0][8])
         #年份
-        year = self.split_info(info['info'][0][9])
+        show_time = self.split_info(info['info'][0][9])
         #语言
         language = self.split_info(info['info'][0][10])
         #集数
-        number = self.split_info(info['info'][0][11])
-        #时长
-        duration = self.split_info(info['info'][0][12])
-        #点击
-        click = self.split_info(info['info'][0][13])
+        name_info = self.split_info(info['info'][0][11])
+        #片长
+        lens = self.split_info(info['info'][0][12])
+        #日播放量
+        day_plays = self.split_info(info['info'][0][13])
         #rem3u8
         m3u8_list = [url.split('$')  for url in info['show_list'] if url.endswith('.m3u8')]
         #reyun
@@ -143,23 +157,27 @@ info = '\
         
     
         film_info = dict(
-            score = score,
-            alias = alias,
+            imgurl = self.domain + imgurl,
+            name = name,
+            intro= intro,
+            grade = grade,
+            athour_name = athour_name,
 #            state = state,
-            date = date,
+            up_date = up_date,
             actor = actor,
             director = director,
             types = types,
             extend = extend,
             area = area,
-            year = year,
+            show_time = show_time,
             language = language,
-            number = number,
-            duration = duration,
-            click = click,
+            name_info = name_info,
+            lens = lens,
+            day_plays = day_plays,
             m3u8_list = m3u8_list,
             yun_list = yun_list,
-            
+            total_score = '',
+            total_score_number = '',
             )
         
         
@@ -290,8 +308,8 @@ info='<li class="clearfix">\s+?\
         
 if __name__ == '__main__':
     
-#    url = 'https://www.rebozy.com/index.php/vod/detail/id/3941.html'
-    url = 'https://www.rebozy.com/index.php/index/index/page/2.html'
+    url = 'https://www.rebozy.com/index.php/vod/detail/id/3941.html'
+#    url = 'https://www.rebozy.com/index.php/index/index/page/2.html'
     
     x = Rebozy()
     #info = x.get_film_info(url)

@@ -159,6 +159,7 @@ class FilmApi:
                         
                         
                         print(trait_class, '报错',str(sys.exc_info()))
+                        print(url)
                         
                     else:
                     
@@ -171,25 +172,7 @@ class FilmApi:
         
         return detail_info
             
-                    
-                    
-                    
-                
-                
-                
-                
-                
-                
-        
-        
-        
-        
-    
-    
-
-
-        
-        
+                           
             
         
         
@@ -205,9 +188,11 @@ if __name__ == '__main__':
         for i in r.keys():
             
             r.delete(i)
+
+    clear_redis()
             
             
-    info = x.search_detail('亮剑')
+    info = x.search_detail('筑梦情缘')
     #
     
 
