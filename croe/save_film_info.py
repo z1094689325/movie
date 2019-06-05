@@ -9,7 +9,7 @@ Created on Tue Jun  4 14:40:57 2019
 import sys
 import json
 import threading
-from setting import DBConnect
+from .setting import DBConnect
 
 from show_page_queue import ShowPageQueue
 
