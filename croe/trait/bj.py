@@ -34,10 +34,12 @@ class Filmbj:
         return [i.strip() for i in info_str if i != '']
     
     def get_film_info(self, url, encoding = None):
-        
+                        
         regex = dict(
                               
                 intro = '<!--简介开始-->(.*?)<!--简介结束-->',
+                
+                imgurl = '<div class="videoPic"><!--图片开始--><img src="(.*?)"/><!--图片结束--></div>',
                 
                 info='<li class="sa">影片名称: <!--片名开始-->(.*?)<!--片名结束--></li>\s+?\
 <li class="sa">影片别名: <!--别名开始-->(.*?)<!--别名结束--></li>\s+?\
@@ -53,8 +55,10 @@ class Filmbj:
 
                 )
         
-        info = Spider().get_info(url, encoding = encoding, **regex)
         
+        
+        info = Spider().get_info(url, encoding = encoding, **regex)
+                
         director = self.split_info(info['info'][0][4])
             
         actor = self.split_info(info['info'][0][3])
@@ -74,6 +78,8 @@ class Filmbj:
         m3u8_list = [i[0]+i[1].replace('</span>','') for i in yun_list]
     
         film_info = dict(
+                
+                imgurl = info['imgurl'],
                 
                 name = info['info'][0][0],
                 

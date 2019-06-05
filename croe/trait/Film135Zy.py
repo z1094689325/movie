@@ -4,9 +4,9 @@ Created on Thu May 30 19:47:28 2019
 
 @author: dell
 """
-__author__="任晋慧"
 from spider import Spider
-
+from multiprocessing.dummy import Pool
+pool=Pool(4)
 class Film135Zy:
     '''
         def get_film_info(self, url, encoding = None): 
@@ -100,6 +100,7 @@ class Film135Zy:
     ##获取网站的二级网页所有字段
     def get_film_info(self,url,encoding=None):
         regex=dict(
+            imgurl='<div class="vodImg"><img class="lazy" src="(.*?)" alt=".*?" />',
             name='<h2>(.*?)</h2>',
             score='<div class="vodh"><h2>.*?</h2><span>(.*?)</span>',
             pingfen='<label>(.*?)</label>',
@@ -116,6 +117,7 @@ class Film135Zy:
             show_list='checked="" />(.*?)</li>'
             )
         two_info=Spider().get_info(url,encoding,**regex)
+        imgurl=two_info['imgurl'][0]
         infro=two_info['infro'][0]
         director=self.split_info(two_info['info'][0][1])
         actor=self.split_info(two_info['info'][0][2])
@@ -126,6 +128,7 @@ class Film135Zy:
         yun_list=[url.split('$') for url in two_info['show_list'] if not url.endswith('.m3u8')]
         
         film_info=dict(
+                imgurl=imgurl,
                 name=two_info['name'][0],
                 name_info=two_info['score'][0],
                 pingfen=two_info['pingfen'][0],
@@ -146,12 +149,19 @@ class Film135Zy:
 if __name__=='__main__':
     f=Film135Zy()
 #    urls=f.get_all_show_page_url_yield()
-#    two_info2=f.get_film_info('http://www.135zy.vip/?m=vod-detail-id-23299.html')
-#    search=f.film_search('老师好')
 #    urls=[i for i in urls]
 #    urls=urls[:5]
-    four=f.get_page_film('http://www.135zy.vip/?m=vod-index-pg-32.html')
-#    one_href=[f.get_page_film(i) for i in urls]
+#    ls=[]
+#    ls.append(pool.map(f.get_show_page_info,urls[:5]))
+#    ls2=[]
+#    [ls2.append(i['film_list']) for i in ls[0]]
+#    ls3=[]
+#    [ls3.append(i[0]['url']) for i in ls2]
+    
+#    [ls.append(f.get_show_page_info(i)) for i in urls]
+#    two_info2=f.get_film_info('http://www.135zy.vip/?m=vod-detail-id-23299.html')
+#    four=f.get_page_film('http://www.135zy.vip/?m=vod-index-pg-32.html')
+
 #    for i in one_href['film_list']:
 #        two_info2=f.get_film_info(i['href'])
 #        print(two_info2)

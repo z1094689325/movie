@@ -9,6 +9,8 @@ Created on Wed May 29 16:42:01 2019
 #
 #import requests
 
+__author__ == '杨兴伟'
+
 from spider import Spider
 
 class Film_special:
@@ -140,6 +142,8 @@ class Film_special:
 <h2>(.*?)</h2>\s+?\
 <span>(.*?)</span>\s+?\
 <label>(.*?)</label>',
+
+                imgurl = '<img class="lazy" src="(.*?)" alt=".*?" />',
                        
                 info = '\
 <li>别名：<span>(.*?)</span></li>\s+?\
@@ -170,6 +174,8 @@ class Film_special:
                 'screen_massg' : thr_info['pr_info'][0][1],
                 
                 'douban_score' : thr_info['pr_info'][0][2],
+                
+                'imgurl' : thr_info['imgurl'],
                 
                 'athour_name' : thr_info['info'][0][0],
                 

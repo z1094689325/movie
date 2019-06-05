@@ -68,6 +68,8 @@ class Film156:
                 
                 name = '<h2><!--片名开始-->(.*?)<!--片名结束--></h2>\s+?<span><!--备注开始-->(.*?)<!--备注结束--></span>\s+?<label>(.*?)</label>',
                 
+                imgurl='<img class="lazy" src="(.*?)" alt=".*?" />',
+                
                 info = '\
 <li>别名：<span><!--别名开始-->(.*?)<!--别名结束--></span></li>\s+?\
 <li>导演：<span><!--导演开始-->(.*?)<!--导演结束--></span></li>\s+?\
@@ -77,6 +79,7 @@ class Film156:
 <li>语言：<span><!--语言开始-->(.*?)<!--语言结束--></span></li>\s+?\
 <li>上映：<span><!--上映开始-->(.*?)<!--上映结束--></span></li>\s+?\
 <li>更新：<span>(.*?)</span></li>',
+
 
                 show_list = 'checked="" />(.*?)</li>'
 
@@ -105,7 +108,7 @@ class Film156:
                 
                 name = info['name'][0][0],
                 
-                start_time = info['name'][0][1],
+                name_info = info['name'][0][1],
                 
                 grade = info['name'][0][2],
                 
@@ -119,6 +122,8 @@ class Film156:
                 
                 area = area,
                 
+                imgurl=info['imgurl'][0],
+                
                 language = language,
                 
                 show_time = info['info'][0][6],
@@ -128,6 +133,14 @@ class Film156:
                 m3u8_list = m3u8_list,
                 
                 yun_list = yun_list,
+                
+                day_plays='',
+                
+                lens='',
+                
+                total_score='',
+                
+                total_score_number=''
                 
                 )
         
