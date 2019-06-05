@@ -70,7 +70,7 @@ class Film123ku:
                 name = info['name'][0][0],
                 name_info = info['name'][0][1],
                 grade = info['name'][0][2],
-                anthor=info['anthor'][0],
+                athour_name=info['anthor'][0],
                 director=director,
                 act=act,
                 types=x[0],
