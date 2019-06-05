@@ -179,17 +179,17 @@ class Film_special:
                 
                 'athour_name' : thr_info['info'][0][0],
                 
-                'directors' : self.clean_info(thr_info['info'][0][1]),
+                'directors' : self.split_info(thr_info['info'][0][1]),
                 
-                'actors' : self.clean_info(thr_info['info'][0][2]),
+                'actors' : self.split_info(thr_info['info'][0][2]),
                 
                 'lianzai' : thr_info['info'][0][3],
                 
-                'type' : self.clean_info(thr_info['info'][0][4]),
+                'type' : self.split_info(thr_info['info'][0][4]),
                 
-                'atea' : self.clean_info(thr_info['info'][0][5]),
+                'atea' : self.split_info(thr_info['info'][0][5]),
                 
-                'language' : self.clean_info(thr_info['info'][0][6]),
+                'language' : self.split_info(thr_info['info'][0][6]),
                 
                 'show_date' : thr_info['info'][0][7],
                 
