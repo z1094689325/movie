@@ -11,7 +11,7 @@ __author__ = '贾荀淘'
 from spider import Spider
 
 
-class Film_kubo:
+class Film_mf:
     
     '''
     def get_film_info(self, url, encoding = None): 
@@ -68,6 +68,8 @@ class Film_kubo:
             
         
         regex = dict(
+                
+                imgurl = '<img class="lazy" src="(.*?)" alt=".*?" />',
                               
                 intro = '<div class="vodplayinfo">(.*?)</div>',
                 
@@ -112,6 +114,8 @@ class Film_kubo:
         
     
         film_info = dict(
+                
+                imgurl = info['imgurl'][0],
                 
                 name = info['name'][0][0],
                 
@@ -265,11 +269,11 @@ if __name__ == '__main__':
     
     url = 'http://www.kubozy.net/?m=vod-index-pg-1.html'
     
-    x = Film_kubo()
+    x = Film_mf()
     
 #    yes = x.get_all_page(url)
     
-    #info = x.get_film_info('http://www.kubozy.net/?m=vod-detail-id-25252.html')
+    #info = x.get_film_info('http://www.kubozy.net/?m=vod-detail-id-25427.html')
     
     #info2 = x.film_search('下一站')
     
