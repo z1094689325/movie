@@ -71,6 +71,8 @@ class Filmzuixinzy:
                 
                 name = '<h2>(.*?)</h2>\s+?<span>(.*?)</span>\s+?<label>(.*?)</label>',
                 
+                imgurl = '<img class="lazy" src="(.*?)" alt=".*?" />',
+                
                 info = '\
 <li>别名：<span>(.*?)</span></li>\s+?\
 <li>导演：<span>(.*?)</span></li>\s+?\
@@ -110,6 +112,8 @@ class Filmzuixinzy:
         
     
         film_info = dict(
+                
+                imgurl = info['imgurl'],
                 
                 name = info['name'][0][0],
                 
