@@ -22,7 +22,9 @@ def search_get(request):
 
     search_info = FilmSubo8988().film_search(keyword)
 
-    return JsonResponse(search_info)
+    return render(request, 'film_search/search-list.html')
+
+    # return JsonResponse(search_info)
 
     # return HttpResponse(json.dumps(search_info))
     

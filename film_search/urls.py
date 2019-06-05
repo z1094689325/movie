@@ -17,12 +17,12 @@ Including another URLconf
 from django.urls import path
 from . import views
 
-
+app_name = 'film_search'
 
 urlpatterns = [
 
-    path('', views.index),
+    path('', views.index, name = 'index'),
 
-    path('get/', views.search_get),
+    path('get/', views.search_get, name = 'search'),
     #path('admin/', admin.site.urls),
 ]
