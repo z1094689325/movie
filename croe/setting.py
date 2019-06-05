@@ -67,7 +67,7 @@ class DBConnect:
         
         
 if __name__ == '__main__':
-    
+    x = DBConnect()
     pass
     
     #x= FilmApi()

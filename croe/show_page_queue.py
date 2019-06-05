@@ -4,6 +4,7 @@ Created on Tue Jun  4 10:31:32 2019
 
 @author: Administrator
 """
+import multiprocessing
 import importlib
 import threading
 import sys
@@ -90,6 +91,8 @@ class ShowPageQueue:
     def threads_make_show_page_queue(self):
         
         for i in range(len(trait_info)):
+            
+#            t = multiprocessing.process(target = self.make_show_page_queue)    #
         
             t = threading.Thread(target = self.make_show_page_queue)
             t.start()
