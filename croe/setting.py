@@ -11,11 +11,11 @@ import redis
 
 #############数据库配置################
 
-mongo_host = '192.168.2.108'
+mongo_host = '192.168.2.107'
 
 mongo_port = 27017
 
-redis_host = '192.168.2.108'
+redis_host = '192.168.2.107'
 
 redis_port = '6379'
 

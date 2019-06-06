@@ -49,7 +49,24 @@ def search_get(request):
 
 def play(request):
 
-    context = {}
+    'search/play/?url=http://123ku.com/?m=vod-detail-id-17268.html'
+
+    url = request.GET.get('url')
+    
+    num = request.GET.get('num')
+    print(num)
+    
+    if num == None:
+        
+        num = 0
+    
+    detail = FilmApi().single_detail(url)
+    
+    detail.update({'show_now':detail['m3u8_list'][int(num)]})
+
+    
+
+    context = detail
 
     return render(request, 'film_search/play.html', context)
 

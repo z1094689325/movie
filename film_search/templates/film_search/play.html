@@ -24,7 +24,7 @@
 		</div>
 	</header>
 	<nav class="head-nav">
-		<p class="video-name">XXX影片</p>
+		<p class="video-name">{{name}}{{show_now0}}</p>
 	</nav>
 	<section>
 		<div class="video">
@@ -37,7 +37,7 @@
             		variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
             		flashplayer:false,//如果强制使用flashplayer则设置成true
             		video:{
-            		    file:'https://www.sokoyo-rj.com:65/20190419/f04TRcgo/index.m3u8',//视频地址
+            		    file:'{{show_now.1}}',//视频地址
             		    type:'video/m3u8'
             		}
             	};
@@ -57,13 +57,17 @@
 		</div>
 		<!-- 剧集 -->
 		<div class="episodes clearfix">
-			<span><a href="#">第一集</a></span>
-			<span><a href="#">第二集</a></span>
+		
+		{%for i in m3u8_list%}
+			<span><a href="#">{{i.0}}</a></span>
+			
+        {%endfor%}
+
 		</div>
 		
 		<!-- 内容简介 -->
 		<div class="cont-jianj">
-			<p>《<span id="cont_jianj_name">XXX影片</span>》 内容简介</p>
+			<p>《<span id="cont_jianj_name">{{name}}</span>》 内容简介</p>
 			<div class="cont-text" id="cont_jianj_text">ajdajsdalsjdlajsdlasjdalksjdalkjsdadjasl</div>
 		</div>
 	</section>

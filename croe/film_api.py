@@ -11,20 +11,28 @@ import threading
 import json
 import sys
 
+from setting import DBConnect
+
 from script_trait import TraitAPI
 
 trait_info_dict = TraitAPI().trait_obj()
 
 trait_info = trait_info_dict.values()#将所有特征函数的类生成列表
 
+mongo_conn = DBConnect().mongo_conn
+
+mongo_db = mongo_conn['film']
+
+mongo_table = mongo_db['film_detail']#mongodb的链接对象
+
+redis_conn = DBConnect().redis_conn
+
 class FilmApi:
     
     def __init__(self):
-    
-        
-        pool = redis.ConnectionPool(host = '192.168.2.107', port = 6379, password = '1', db = 9, decode_responses = True)
-        
-        self.r = redis.StrictRedis(connection_pool=pool)
+
+
+        self.r = redis_conn
         
         self.q = queue.Queue(5)#创建一个队列对象，queue.LifoQueue,创建一个堆栈，还有一个优先级队列
         
@@ -118,6 +126,58 @@ class FilmApi:
             
         
         return self.search_info
+
+    def single_detail(self, url):
+        
+        #print(trait_info_dict)
+        
+        
+        
+        detail_mongo_info = mongo_table.find_one({'self_url': url})
+        
+        if detail_mongo_info:  #检测该url链接的信息在不在mongo里
+            
+            return detail_mongo_info  #如果在就此返回，如果不在，继续
+            
+            
+        
+        
+        for host in trait_info_dict:
+            
+            host_r = host.replace('http://www.', '').replace('https://www.', '').replace('http://','').replace('https://','')
+            #print(host)
+            
+            if host_r in url:
+                                
+                break
+        else:
+                      
+            raise ValueError('url 必须有是全链接：url没有域名')
+
+        trait_class = trait_info_dict[host]#获取对应的class
+                    
+        try:
+        
+            film_info = trait_class().get_film_info(url)#获取url对应的信息
+            
+            
+            
+        except:
+                                   
+            print(trait_class, '报错',str(sys.exc_info()))
+            print(url)
+            
+        else:
+            
+            film_info.update({'self_url':url, 'self_host':host})
+            
+            mongo_table.insert_one(film_info)
+            
+        
+            return film_info #
+           
+
+        
     
     
     def search_detail(self, keyword):
@@ -146,23 +206,13 @@ class FilmApi:
                     
                     url = i['url']  #获取视频url
                     
-                    trait_class = trait_info_dict[host]#获取对应的class
+                    single_info = self.single_detail(url)#获取url的详细作息，同时也写入到mongo中
                     
-                    try:
-                    
-                        film_info = trait_class().get_film_info(url)#获取url对应的信息
+                    if single_info != None:
+
+                        single_info.update({'_id':str(single_info['_id'])})
                         
-                        
-                        
-                    except:
-                                               
-                        print(trait_class, '报错',str(sys.exc_info()))
-                        print(url)
-                        
-                    else:
-                    
-                        detail_list.append(film_info)#将作息放入到列表中
-                        print(url, '成功')
+                        detail_list.append(single_info)
                     
                 detail_info[host] = detail_list#将这个网站的搜索信息放入到detail_info中
                 
@@ -190,11 +240,15 @@ if __name__ == '__main__':
         for i in r.keys():
             
             r.delete(i)
+            
+    url = 'https://www.subo8988.com/?m=vod-detail-id-26031.html'
+            
 
-    clear_redis()
+
+    #clear_redis()
             
             
-    info = x.search_detail('筑梦情缘')
+    #info = x.search_detail('筑梦情缘')
     #
     
 
