@@ -22,7 +22,7 @@ class FilmApi:
     def __init__(self):
     
         
-        pool = redis.ConnectionPool(host = '192.168.2.108', port = 6379, password = '1', db = 9, decode_responses = True)
+        pool = redis.ConnectionPool(host = '192.168.2.107', port = 6379, password = '1', db = 9, decode_responses = True)
         
         self.r = redis.StrictRedis(connection_pool=pool)
         
@@ -97,19 +97,20 @@ class FilmApi:
         
         
         self.q.join()                   #阻塞主线程直到所有的队列任务完成
-        print('卡q’')
+        print('q.join() 通过')
         for i in range(len(trait_info)):#退出线程机制
 
-            print('******************')
             
             self.q.put(None)
             
-        print('ka qq')
+    
             
             
         for t in threads:
             
             t.join()
+
+        print('t.join() 通过')
             
             
         self.r.set(keyword, json.dumps(self.search_info), ex = 6*60*60)   #保存到redis中，6个小后过期
@@ -130,7 +131,7 @@ class FilmApi:
         
         search_info = self.my_thread(keyword)
         
-        detail_info = {'keyword': keyword}
+        detail_info = {}
         
         
         for host, info in search_info.items():
@@ -154,23 +155,24 @@ class FilmApi:
                         
                         
                     except:
-                        
-                        
-                        
-                        
+                                               
                         print(trait_class, '报错',str(sys.exc_info()))
                         print(url)
                         
                     else:
                     
                         detail_list.append(film_info)#将作息放入到列表中
+                        print(url, '成功')
                     
                 detail_info[host] = detail_list#将这个网站的搜索信息放入到detail_info中
                 
-        self.r.set(keyword+'_detail', json.dumps(detail_info), ex = 6*60*60)
+                
+        search_detail = {'keyword': keyword, 'search_detail':detail_info}
+                
+        self.r.set(keyword+'_detail', json.dumps(search_detail), ex = 6*60*60)
         
         
-        return detail_info
+        return search_detail
             
                            
             

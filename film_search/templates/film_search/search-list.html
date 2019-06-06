@@ -27,34 +27,51 @@
 	<div class="search-stats">
 		<div class="header">
 			<h3>
-				<strong class="search-title">XX</strong>
+				<strong class="search-title">{{keyword}}</strong>
 				视频共(
-				<strong class="search-num">xx</strong>
+				<strong class="search-num">{{count}}</strong>
 				个)
 			</h3>
 		</div>
 		<p class="line"></p>
 	</div>
 	<!-- 查询结果 -->
+
+	<!--<p class="p"><span class="le">导演：</span><span class="ri">{{info.director|join:','}}</span></p>-->
+
+	
+	
 	<section class="search-list">
 		<ul class="list-wrap">
-			<li>
-				<a href="" class="clearfix">
-					<div class="left-box">
-						<img src="{% static 'film_search/img/index-thumbnail/muqin.jpg'%}" alt="">
-					</div>
-					<div class="right-box">
-						<h1 class="video-title">一个母亲的复仇</h1>
-						<div class="cont">
-							<p class="p"><span class="le">分类：</span><span class="ri">剧情片</span></p>
-							<p class="p"><span class="le">类型：</span><span class="ri">犯罪 剧情</span></p>
-							<p class="p"><span class="le">演员：</span><span class="ri">希里黛玉</span></p>
-							<p class="p pt"><span class="le">状态：</span><span class="ri">BD高清</span></p>
-							<p class="p"><span class="le">时间：</span><span class="ri">2019-05-16 22：03：15</span></p>
-						</div>
-					</div>
-				</a>
-			</li>
+            {%for key,value in search_detail.items%}
+            <li>
+                <ul  class="list-wrap">{{key}}</ul>
+                {%for info in value%}
+            <li>
+                <a href="{{i.url}}" class="clearfix">
+                    <div class="left-box">
+                        <img src="{{info.imgurl}}" alt="">
+                    </div>
+                    <div class="right-box">
+                        <h1 class="video-title">{{info.name}}</h1>
+                        <div class="cont">
+                            <p class="p">
+                                <span class="le">分类：</span>
+                                <span class="ri">
+                                    {{info.typs}}
+                                </span>
+                            </p>
+                            <!-- <p class="p"><span class="le">类型：</span><span class="ri"><%= v.lei_xing %></span></p> -->
+                            <p class="p"><span class="le">演员：</span><span class="ri">{{info.actor|join:','}}</span></p>
+                            <p class="p pt"><span class="le">状态：</span><span class="ri">{{info.name_info}}</span></p>
+                            <p class="p"><span class="le">时间：</span><span class="ri">{{info.up_date}}</span></p>
+                        </div>
+                    </div>
+                </a>
+            </li>
+                {% endfor %}
+            </li>
+            {% endfor %}
 		</ul>
 	</section>
 </body>
@@ -83,5 +100,5 @@
 		</li>
 	<% }) %>
 </script>
-<script src="{% static 'film_search/public/js/search-list.js'%}"></script>
+<script src="{% static 'film_search/js/search-list.js'%}"></script>
 </html>
